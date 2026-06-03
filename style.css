@@ -1,0 +1,291 @@
+/* Reset */
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
+
+/* Base layout */
+html,
+body {
+height: 100%;
+overflow: hidden;
+font-family: monospace;
+font-size: 13px;
+background: #fff;
+color: #000;
+}
+
+#app {
+display: flex;
+height: 100dvh;
+}
+
+/* Sidebar */
+#sidebar {
+width: 340px;
+min-width: 280px;
+max-width: 340px;
+display: flex;
+flex-direction: column;
+height: 100%;
+border-right: 1px solid #ccc;
+background: #fff;
+z-index: 10;
+}
+
+/* Header */
+#header {
+padding: 10px 12px 8px;
+border-bottom: 1px solid #000;
+flex-shrink: 0;
+}
+
+#header h1 {
+font-size: 20px;
+font-weight: bold;
+letter-spacing: -0.5px;
+}
+
+#header p {
+font-size: 11px;
+color: #666;
+margin-top: 1px;
+}
+
+/* Panel */
+#panel {
+padding: 10px 12px 8px;
+border-bottom: 1px solid #ccc;
+flex-shrink: 0;
+}
+
+/* Input rows */
+.input-row {
+display: flex;
+gap: 6px;
+margin-bottom: 6px;
+align-items: center;
+}
+
+.input-row label {
+width: 16px;
+font-weight: bold;
+flex-shrink: 0;
+font-size: 12px;
+}
+
+.input-wrap {
+position: relative;
+flex: 1;
+display: flex;
+gap: 4px;
+}
+
+.input-wrap input {
+flex: 1;
+border: 1px solid #999;
+padding: 5px 7px;
+font-family: monospace;
+font-size: 12px;
+min-width: 0;
+}
+
+.input-wrap input:focus {
+outline: 2px solid #000;
+}
+
+/* Pin button */
+.pin-btn {
+border: 1px solid #999;
+background: #fff;
+cursor: pointer;
+padding: 0 6px;
+font-size: 14px;
+flex-shrink: 0;
+}
+
+.pin-btn:hover {
+background: #f0f0f0;
+}
+
+.pin-btn.active {
+background: #000;
+color: #fff;
+border-color: #000;
+}
+
+/* Suggestions dropdown */
+.suggestions {
+position: absolute;
+background: #fff;
+border: 1px solid #000;
+z-index: 9999;
+max-height: 180px;
+overflow-y: auto;
+width: calc(100% - 34px);
+left: 0;
+top: 100%;
+}
+
+.suggestions div {
+padding: 5px 8px;
+cursor: pointer;
+font-size: 11px;
+border-bottom: 1px solid #eee;
+}
+
+.suggestions div:hover {
+background: #f0f0f0;
+}
+
+/* Go button */
+#go-btn {
+width: 100%;
+padding: 7px;
+background: #000;
+color: #fff;
+border: none;
+cursor: pointer;
+font-family: monospace;
+font-size: 13px;
+font-weight: bold;
+margin-top: 2px;
+}
+
+#go-btn:hover {
+background: #333;
+}
+
+#go-btn:disabled {
+background: #888;
+cursor: default;
+}
+
+/* Pin hint */
+#pin-hint {
+padding: 5px 12px;
+font-size: 11px;
+color: #fff;
+background: #000;
+display: none;
+border-bottom: 1px solid #333;
+}
+
+#pin-hint.visible {
+display: block;
+}
+
+/* Status bar */
+#status-bar {
+padding: 4px 12px;
+font-size: 11px;
+color: #666;
+border-bottom: 1px solid #eee;
+flex-shrink: 0;
+min-height: 21px;
+}
+
+/* Results panel */
+#results {
+flex: 1;
+overflow-y: auto;
+}
+
+.fare-note {
+padding: 6px 12px;
+font-size: 10px;
+color: #666;
+border-bottom: 1px solid #eee;
+}
+
+/* Route options */
+.route-option {
+border-bottom: 1px solid #eee;
+padding: 9px 12px;
+cursor: pointer;
+}
+
+.route-option:hover {
+background: #f9f9f9;
+}
+
+.route-option.selected {
+background: #f4f4f4;
+border-left: 3px solid #000;
+}
+
+.route-title {
+font-weight: bold;
+font-size: 12px;
+margin-bottom: 3px;
+}
+
+.route-meta {
+font-size: 11px;
+color: #555;
+margin-bottom: 4px;
+display: flex;
+flex-wrap: wrap;
+gap: 4px;
+}
+
+.route-steps {
+font-size: 11px;
+}
+
+/* Steps */
+.step {
+display: flex;
+align-items: flex-start;
+gap: 6px;
+margin-bottom: 3px;
+}
+
+.step-dot {
+width: 8px;
+height: 8px;
+border-radius: 50%;
+background: #000;
+flex-shrink: 0;
+margin-top: 2px;
+}
+
+.step-transfer .step-dot {
+background: #fff;
+border: 2px solid #555;
+}
+
+.step-label {
+color: #cc4400;
+font-weight: bold;
+}
+
+/* States */
+.no-results {
+padding: 14px 12px;
+font-size: 12px;
+color: #555;
+line-height: 1.5;
+}
+
+.loading {
+padding: 14px 12px;
+font-size: 12px;
+color: #555;
+}
+
+.error {
+padding: 8px 12px;
+background: #fee;
+border: 1px solid #fcc;
+font-size: 12px;
+color: #c00;
+}
+
+/* Map */
+#map {
+flex: 1;
+height: 100%;
+z-index: 1;
+}
