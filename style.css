@@ -21,6 +21,10 @@ display: flex;
 height: 100dvh;
 }
 
+.leaflet-tile-pane {
+    filter: grayscale(100%) opacity(0.5);
+}
+
 /* Sidebar */
 #sidebar {
 width: 340px;

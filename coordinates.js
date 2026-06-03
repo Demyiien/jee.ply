@@ -42,9 +42,10 @@ const COORDS = {
   "Talamban":                        { lat: 10.3642, lng: 123.9160 }, 
   "Mandaue":                         { lat: 10.3446, lng: 123.9424 }, 
   "Bulacao":                         { lat: 10.2730, lng: 123.8480 }, 
-  "Tabunok":                         { lat: 10.2600, lng: 123.8430 },
+  "Tabunok":                         { lat: 10.2428, lng: 123.8477 },
+  "Poblacion Talisay":               { lat: 10.2451, lng: 123.8510 },
   "Inayawan":                        { lat: 10.2745, lng: 123.8695 }, 
-  "Pardo":                           { lat: 10.2815, lng: 123.8580 },
+  "Pardo":                           { lat: 10.2825, lng: 123.8580 },
   "Quiot / Basak San Nicolas":       { lat: 10.2850, lng: 123.8640 }, 
   "Talisay City":                    { lat: 10.2520, lng: 123.8390 }, 
   "Minglanilla":                     { lat: 10.2442, lng: 123.7975 }, 
@@ -57,7 +58,7 @@ const COORDS = {
   "Capitol":                         { lat: 10.3164, lng: 123.8907 }, 
   "Mango Square / Escario":          { lat: 10.3175, lng: 123.8925 }, 
   "Salinas Drive":                   { lat: 10.3340, lng: 123.9012 }, 
-  "N. Bacalso Ave":                  { lat: 10.2955, lng: 123.8790 },
+  "N. Bacalso Ave":                  { lat: 10.3060, lng: 123.8860 },
 
   // ── Malls / Markets ───────────────────────────────────────────────────────
   "Robinsons Place":                 { lat: 10.3105, lng: 123.8935 }, 
@@ -76,7 +77,7 @@ const COORDS = {
   "USC Talamban Campus (TC)":        { lat: 10.3524, lng: 123.9135 }, 
   "UP Cebu":                         { lat: 10.3228, lng: 123.8988 }, 
   "SWU Basak Campus":                { lat: 10.2849, lng: 123.8692 }, 
-  "CITU":                            { lat: 10.2955, lng: 123.8800 }, 
+  "CITU":                            { lat: 10.2941, lng: 123.8813 }, 
   "University of Cebu (UC)":         { lat: 10.2929, lng: 123.9002 }, 
 
   // ── Hospitals & Hotels ────────────────────────────────────────────────────

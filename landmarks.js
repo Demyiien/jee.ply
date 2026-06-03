@@ -40,6 +40,7 @@ const LANDMARKS = [
   { name: "Mandaue",                           ...COORDS["Mandaue"] },
   { name: "Bulacao",                           ...COORDS["Bulacao"] },
   { name: "Tabunok",                           ...COORDS["Tabunok"] },
+  { name: "Poblacion Talisay",                 ...COORDS["Poblacion Talisay"] },
   { name: "Inayawan",                          ...COORDS["Inayawan"] },
   { name: "Pardo",                             ...COORDS["Pardo"] },
   { name: "Quiot",                             ...COORDS["Quiot / Basak San Nicolas"] },

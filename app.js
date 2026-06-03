@@ -3,7 +3,19 @@ let state = { origin: null, dest: null, routes: [], selectedRoute: null };
 let pinMode = null;
 
 // ─── MAP INIT ─────────────────────────────────────────────────────────────
-const map = L.map('map').setView([10.3157, 123.8854], 13);
+// Define the bounding box for Cebu Province
+const cebuBounds = L.latLngBounds(
+  [9.4000, 123.1000], // Southwest corner (Santander area)
+  [11.3500, 124.4000] // Northeast corner (Daanbantayan / Camotes area)
+);
+
+const map = L.map('map', {
+  maxBounds: cebuBounds,
+  maxBoundsViscosity: 1.0, // Makes the boundary completely solid
+  minZoom: 9 // Prevents users from zooming out past the island
+}).setView([10.3157, 123.8854], 13);
+
+// Default OpenStreetMap tiles
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '© OpenStreetMap', maxZoom: 19
 }).addTo(map);

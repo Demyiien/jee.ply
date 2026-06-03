@@ -150,8 +150,18 @@ const JEEP_ROUTES = {
     stops: [
       stop("Quiot / Basak San Nicolas"),
       stop("Punta Princesa"),
-      stop("SWU Basak Campus"),
-      stop("Mambaling Flyover"),
+      stop("CITU"),
+      stop("South Bus Terminal"),
+      stop("Colon")
+    ]
+  },
+
+  "09G": {
+    name: "Basak San Nicolas – Colon via Punta (alt)",
+    color: "#b71c1c",
+    stops: [
+      stop("Quiot / Basak San Nicolas"),
+      stop("Punta Princesa"),
       stop("CITU"),
       stop("South Bus Terminal"),
       stop("Colon")
@@ -167,7 +177,6 @@ const JEEP_ROUTES = {
       stop("Bulacao"),
       stop("Pardo"),
       stop("Basak San Nicolas"),
-      stop("Mambaling Flyover"),
       stop("CITU"),
       stop("South Bus Terminal"),
       stop("Urgello"),
@@ -401,16 +410,13 @@ const JEEP_ROUTES = {
   },
 
   "MJ-1": {
-    name: "Mango Jeep (Modern): Minglanilla ↔ IT Park",
+    name: "Mango Jeep (Modern): Talisay ↔ IT Park",
     color: "#fca311",
     stops: [
-      stop("Minglanilla"),
-      stop("Talisay City"),
+      stop("Poblacion Talisay"),
       stop("Tabunok"),
       stop("Bulacao"),
       stop("Pardo"),
-      stop("Basak San Nicolas"),
-      stop("Mambaling Flyover"),
       stop("CITU"),
       stop("South Bus Terminal"),
       stop("Fuente Osmeña"),
@@ -425,8 +431,7 @@ const JEEP_ROUTES = {
     color: "#ef476f",
     stops: [
       stop("SM Seaside City Cebu"),
-      stop("Mambaling Flyover"),
-      stop("N. Bacalso Ave"),
+      stop("CITU"),
       stop("South Bus Terminal"),
       stop("Fuente Osmeña"),
       stop("Robinsons Place"),
