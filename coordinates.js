@@ -3,93 +3,86 @@
 const COORDS = {
 
   // ── Terminals / Major Hubs ────────────────────────────────────────────────
-  "Carbon":                          { lat: 10.2909, lng: 123.9057 },
-  "Colon":                           { lat: 10.2929, lng: 123.9020 },
-  "Fuente Osmeña":                   { lat: 10.3073, lng: 123.8944 },
-  "SM City Cebu":                    { lat: 10.3114, lng: 123.9178 },
-  "Ayala Center Cebu":               { lat: 10.3182, lng: 123.9049 },
-  "Parkmall":                        { lat: 10.3221, lng: 123.9358 },
-  "IT Park":                         { lat: 10.3296, lng: 123.9050 },
-  "South Bus Terminal":              { lat: 10.2976, lng: 123.8935 },
-  "North Bus Terminal":              { lat: 10.3547, lng: 123.9107 },
-  "Pier":                            { lat: 10.2981, lng: 123.9052 },
-  "Alumnos":                         { lat: 10.2906, lng: 123.8771 },
-  "Cathedral":                       { lat: 10.2934, lng: 123.9016 },
-  "City Hall":                       { lat: 10.2929, lng: 123.9014 },
+  "Carbon":                          { lat: 10.2914, lng: 123.8991 }, 
+  "Colon":                           { lat: 10.2950, lng: 123.9000 }, 
+  "Fuente Osmeña":                   { lat: 10.3113, lng: 123.8932 }, 
+  "SM City Cebu":                    { lat: 10.3111, lng: 123.9181 }, 
+  "Ayala Center Cebu":               { lat: 10.3182, lng: 123.9052 }, 
+  "Parkmall":                        { lat: 10.3248, lng: 123.9351 }, 
+  "IT Park":                         { lat: 10.3283, lng: 123.9059 }, 
+  "South Bus Terminal":              { lat: 10.2976, lng: 123.8935 }, 
+  "North Bus Terminal":              { lat: 10.3259, lng: 123.9324 }, 
+  "Pier":                            { lat: 10.2995, lng: 123.9125 }, 
+  "Alumnos":                         { lat: 10.2895, lng: 123.8770 }, 
+  "Cathedral":                       { lat: 10.2941, lng: 123.9022 }, 
+  "City Hall":                       { lat: 10.2928, lng: 123.9015 }, 
 
-  // ── Barangays ─────────────────────────────────────────────────────────────
-  "Tisa":                            { lat: 10.3015, lng: 123.8705 },
-  "Punta Princesa":                  { lat: 10.2943, lng: 123.8701 },
-  "Basak San Nicolas":               { lat: 10.2867, lng: 123.8706 },
-  "Labangon":                        { lat: 10.2991, lng: 123.8805 },
-  "Labangon Market":                 { lat: 10.2985, lng: 123.8742 },
-  "Mambaling":                       { lat: 10.2950, lng: 123.8823 },
-  "Mambaling Flyover":               { lat: 10.2896, lng: 123.8753 },
-  "Guadalupe":                       { lat: 10.3069, lng: 123.8756 },
-  "Banawa":                          { lat: 10.3261, lng: 123.8728 },
-  "Urgello":                         { lat: 10.3069, lng: 123.8840 },
-  "Mabolo":                          { lat: 10.3226, lng: 123.9142 },
-  "Lahug (Jy Square)":               { lat: 10.3458, lng: 123.8991 },
-  "Apas":                            { lat: 10.3506, lng: 123.8994 },
-  "Pit-os":                          { lat: 10.3590, lng: 123.9044 },
-  "Talamban":                        { lat: 10.3710, lng: 123.9068 },
-  "Mandaue":                         { lat: 10.3503, lng: 123.9403 },
-  "Bulacao":                         { lat: 10.2719, lng: 123.8461 },
-  "Tabunok":                         { lat: 10.2737, lng: 123.8790 },
-  "Inayawan":                        { lat: 10.2755, lng: 123.8752 },
-  "Pardo":                           { lat: 10.2842, lng: 123.8822 },
-  "Quiot":                           { lat: 10.2799, lng: 123.8672 },
-  "Talisay City":                    { lat: 10.2449, lng: 123.8334 },
-  "Minglanilla":                     { lat: 10.2417, lng: 123.8012 },
-  "Plaza Housing":                   { lat: 10.3510, lng: 123.8850 },
-  "Lapu-Lapu City (Opon)":           { lat: 10.3103, lng: 123.9490 },
+  // ── Modern Mega-Developments ──────────────────────────────────────────────
+  "SM Seaside City Cebu":            { lat: 10.2818, lng: 123.8814 }, 
+  "Cebu Ocean Park":                 { lat: 10.2804, lng: 123.8821 }, 
+  "NUSTAR Resort & Casino":          { lat: 10.2740, lng: 123.8856 }, 
+  "Il Corso Lifemalls":              { lat: 10.2682, lng: 123.8741 }, 
+
+  // ── Barangays & Highway Anchors (Corrected to OSM Highway Nodes) ──────────
+  "Tisa":                            { lat: 10.3015, lng: 123.8705 }, 
+  "Punta Princesa":                  { lat: 10.2975, lng: 123.8690 }, 
+  "Basak San Nicolas":               { lat: 10.2885, lng: 123.8682 }, // Snapped to N. Bacalso
+  "Labangon":                        { lat: 10.3032, lng: 123.8790 }, 
+  "Labangon Market":                 { lat: 10.2999, lng: 123.8752 }, 
+  "Mambaling":                       { lat: 10.2920, lng: 123.8815 }, 
+  "Mambaling Flyover":               { lat: 10.2933, lng: 123.8770 }, // Snapped to intersection
+  "Guadalupe":                       { lat: 10.3125, lng: 123.8782 }, 
+  "Banawa":                          { lat: 10.3142, lng: 123.8820 }, 
+  "Urgello":                         { lat: 10.3030, lng: 123.8885 }, 
+  "Mabolo":                          { lat: 10.3226, lng: 123.9142 }, 
+  "Lahug (Jy Square)":               { lat: 10.3382, lng: 123.8995 }, 
+  "Apas":                            { lat: 10.3425, lng: 123.9070 }, 
+  "Busay":                           { lat: 10.3621, lng: 123.8889 }, 
+  "Pit-os":                          { lat: 10.3705, lng: 123.9210 }, 
+  "Talamban":                        { lat: 10.3642, lng: 123.9160 }, 
+  "Mandaue":                         { lat: 10.3446, lng: 123.9424 }, 
+  "Bulacao":                         { lat: 10.2730, lng: 123.8480 }, // Snapped to N. Bacalso
+  "Tabunok":                         { lat: 10.2600, lng: 123.8430 }, // Snapped to N. Bacalso
+  "Inayawan":                        { lat: 10.2745, lng: 123.8695 }, 
+  "Pardo":                           { lat: 10.2815, lng: 123.8580 }, // Snapped to N. Bacalso (Pardo Church area)
+  "Quiot / Basak San Nicolas":       { lat: 10.2850, lng: 123.8640 }, // Quiot proper / inner hub
+  "Talisay City":                    { lat: 10.2520, lng: 123.8390 }, 
+  "Minglanilla":                     { lat: 10.2442, lng: 123.7975 }, 
+  "Plaza Housing":                   { lat: 10.3418, lng: 123.8880 }, 
+  "Lapu-Lapu City (Opon)":           { lat: 10.3148, lng: 123.9491 }, 
 
   // ── Roads / Intersections ─────────────────────────────────────────────────
-  "V. Rama Ave":                     { lat: 10.3015, lng: 123.8889 },
-  "Gorordo Ave":                     { lat: 10.3380, lng: 123.8990 },
-  "Capitol":                         { lat: 10.3287, lng: 123.8972 },
-  "N. Bacalso Ave":                  { lat: 10.3020, lng: 123.8780 },
-  "Mango Square / Escario":          { lat: 10.3140, lng: 123.8895 },
-  "CSBT":                            { lat: 10.2976, lng: 123.8935 },
+  "V. Rama Ave":                     { lat: 10.3082, lng: 123.8890 }, 
+  "Gorordo Ave":                     { lat: 10.3224, lng: 123.8985 }, 
+  "Capitol":                         { lat: 10.3164, lng: 123.8907 }, 
+  "Mango Square / Escario":          { lat: 10.3175, lng: 123.8925 }, 
+  "Salinas Drive":                   { lat: 10.3340, lng: 123.9012 }, 
+  "N. Bacalso Ave":                  { lat: 10.2955, lng: 123.8790 }, // Adjusted to bridge Mambaling and CITU perfectly
 
   // ── Malls / Markets ───────────────────────────────────────────────────────
-  "Robinsons Place":                 { lat: 10.3012, lng: 123.8972 },
-  "Taboan Market":                   { lat: 10.2943, lng: 123.8910 },
-  "Gaisano Country Mall":            { lat: 10.3322, lng: 123.9171 },
-  "Gaisano Grand Jai-Alai":          { lat: 10.2895, lng: 123.8800 },
-  "Jy Square Mall":                  { lat: 10.3458, lng: 123.8991 },
-  "Escario Central Mall":            { lat: 10.3140, lng: 123.8895 },
-  "Mango Square Mall":               { lat: 10.3140, lng: 123.8895 },
-  "Elizabeth Mall (E-Mall)":         { lat: 10.2976, lng: 123.8935 },
-
-  // ── Government / Historic Sites ───────────────────────────────────────────
-  "Cebu Metropolitan Cathedral":     { lat: 10.2934, lng: 123.9016 },
-  "Magellan's Cross":                { lat: 10.2936, lng: 123.9017 },
-  "Fort San Pedro":                  { lat: 10.2904, lng: 123.9056 },
+  "Robinsons Place":                 { lat: 10.3105, lng: 123.8935 }, 
+  "Robinsons Galleria Cebu":         { lat: 10.3114, lng: 123.9090 }, 
+  "Taboan Market":                   { lat: 10.2955, lng: 123.8911 }, 
+  "Gaisano Country Mall":            { lat: 10.3392, lng: 123.9181 }, 
+  "Banilad Town Centre (BTC)":       { lat: 10.3421, lng: 123.9158 }, 
+  "Gaisano Grand Jai-Alai":          { lat: 10.2891, lng: 123.8821 }, 
+  "Escario Central Mall":            { lat: 10.3188, lng: 123.8899 }, 
+  "Elizabeth Mall (E-Mall)":         { lat: 10.2985, lng: 123.8955 }, 
 
   // ── Schools ───────────────────────────────────────────────────────────────
-  "USC Main":                        { lat: 10.3005, lng: 123.8985 },
-  "USC South Campus":                { lat: 10.3052, lng: 123.8820 },
-  "USC North Campus":                { lat: 10.3172, lng: 123.8928 },
-  "UP Cebu":                         { lat: 10.3396, lng: 123.9027 },
-  "SWU Basak Campus":                { lat: 10.2840, lng: 123.8688 },
-  "CITU":                            { lat: 10.2920, lng: 123.8801 },
-  "University of Cebu (UC)":         { lat: 10.2938, lng: 123.8992 },
-  "Quiot / Basak San Nicolas":       { lat: 10.2799, lng: 123.8672 },
+  "USC Main":                        { lat: 10.3001, lng: 123.8985 }, 
+  "USC South Campus":                { lat: 10.3015, lng: 123.8833 }, 
+  "USC North Campus":                { lat: 10.3168, lng: 123.8943 }, 
+  "USC Talamban Campus (TC)":        { lat: 10.3524, lng: 123.9135 }, 
+  "UP Cebu":                         { lat: 10.3228, lng: 123.8988 }, 
+  "SWU Basak Campus":                { lat: 10.2849, lng: 123.8692 }, 
+  "CITU":                            { lat: 10.2955, lng: 123.8800 }, 
+  "University of Cebu (UC)":         { lat: 10.2929, lng: 123.9002 }, 
 
-  // ── Hospitals ─────────────────────────────────────────────────────────────
-  "Cebu Doctors University Hospital": { lat: 10.3100, lng: 123.8930 },
-  "Vicente Sotto Hosp.":             { lat: 10.3101, lng: 123.8862 },
-  "Cebu City Medical Center":        { lat: 10.2976, lng: 123.8935 },
-  "Miller Hospital":                 { lat: 10.2960, lng: 123.8718 },
-
-  // ── Hotels ────────────────────────────────────────────────────────────────
-  "Crown Regency Hotel":             { lat: 10.3093, lng: 123.8953 },
-  "Marco Polo Hotel":                { lat: 10.3334, lng: 123.9070 },
-  "Harolds Hotel":                   { lat: 10.3150, lng: 123.8920 },
-  "Quest Hotel Cebu":                { lat: 10.3162, lng: 123.8930 },
-
-  // ── Airport ───────────────────────────────────────────────────────────────
-  "Mactan Airport (MCIA)":           { lat: 10.3075, lng: 123.9795 },
-
+  // ── Hospitals & Hotels ────────────────────────────────────────────────────
+  "Cebu Doctors University Hospital": { lat: 10.3121, lng: 123.8918 }, 
+  "Vicente Sotto Hosp.":             { lat: 10.3117, lng: 123.8890 }, 
+  "Cebu City Medical Center":        { lat: 10.2991, lng: 123.8922 }, 
+  "Miller Hospital":                 { lat: 10.2995, lng: 123.8725 }, 
+  "Mactan Airport (MCIA)":           { lat: 10.3085, lng: 123.9803 }  
 };

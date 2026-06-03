@@ -217,14 +217,70 @@ document.getElementById('go-btn').addEventListener('click', async () => {
   btn.disabled = true; btn.textContent = 'Searching...';
   setStatus('Finding jeepney routes...');
   document.getElementById('results').innerHTML = '<div class="loading">Searching routes...</div>';
+  
   try {
     const routes = findRoutes(state.origin.lat, state.origin.lng, state.dest.lat, state.dest.lng);
-    setStatus(`${routes.length} route(s) found`);
-    renderResults(routes);
+    
+    if (routes.length > 0) {
+      setStatus(`${routes.length} route(s) found`);
+      renderResults(routes);
+    } else {
+      // ─── FALLBACK SUGGESTION LOGIC ──────────────────────────────────────
+      setStatus('No direct routes found. Computing nearest ride-hailing spots...');
+      
+      // Calculate distances from origin to all known landmarks
+      const suggestions = LANDMARKS.map(landmark => {
+        const distance = haversine(state.origin.lat, state.origin.lng, landmark.lat, landmark.lng);
+        return { ...landmark, distance };
+      });
+      
+      // Sort to get the closest spots
+      suggestions.sort((a, b) => a.distance - b.distance);
+      const topSpots = suggestions.slice(0, 3); // Get top 3 nearest options
+      
+      // Render fallback view in the results sidebar
+      const el = document.getElementById('results');
+      el.innerHTML = `
+        <div class="no-results">
+          <p style="font-weight: bold; margin-bottom: 8px; color: #c00;">No jeepney routes found within walking distance.</p>
+          <p style="margin-bottom: 12px; color: #555;">Consider heading to one of these nearby major hubs or landmarks to hail a ride or find alternative transfers:</p>
+          
+          <div class="fallback-list" style="display: flex; flex-direction: column; gap: 8px;">
+            ${topSpots.map((spot, idx) => `
+              <div class="fallback-card" data-lat="${spot.lat}" data-lng="${spot.lng}" data-name="${spot.name}" style="border: 1px solid #ccc; padding: 8px; cursor: pointer; background: #fafafa;">
+                <div style="font-weight: bold; font-size: 12px;">📍 ${spot.name}</div>
+                <div style="font-size: 11px; color: #666; margin-top: 2px;">Distance: ~${spot.distance.toFixed(2)} km away</div>
+                <div style="font-size: 10px; color: #cc4400; font-weight: bold; text-decoration: underline; margin-top: 4px;">Click to view location</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+      
+      // Clear previous routes from the map view
+      clearMapRoutes();
+      
+      // Add interactive click actions to the fallback elements
+      el.querySelectorAll('.fallback-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const lat = parseFloat(card.dataset.lat);
+          const lng = parseFloat(card.dataset.lng);
+          const name = card.dataset.name;
+          
+          // Move map focus and open a informative temporary popup
+          map.setView([lat, lng], 15);
+          L.popup()
+            .setLatLng([lat, lng])
+            .setContent(`<b>Suggested Hail Spot:</b><br>${name}`)
+            .openOn(map);
+        });
+      });
+    }
   } catch (e) {
     setStatus('Error: ' + e.message);
     document.getElementById('results').innerHTML = `<div class="error">${e.message}</div>`;
   }
+  
   btn.disabled = false; btn.textContent = 'Find Jeepney Routes';
 });
 
