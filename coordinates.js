@@ -26,11 +26,11 @@ const COORDS = {
   // ── Barangays & Highway Anchors (Corrected to OSM Highway Nodes) ──────────
   "Tisa":                            { lat: 10.3015, lng: 123.8705 }, 
   "Punta Princesa":                  { lat: 10.2975, lng: 123.8690 }, 
-  "Basak San Nicolas":               { lat: 10.2885, lng: 123.8682 }, // Snapped to N. Bacalso
+  "Basak San Nicolas":               { lat: 10.2885, lng: 123.8682 }, 
   "Labangon":                        { lat: 10.3032, lng: 123.8790 }, 
   "Labangon Market":                 { lat: 10.2999, lng: 123.8752 }, 
   "Mambaling":                       { lat: 10.2920, lng: 123.8815 }, 
-  "Mambaling Flyover":               { lat: 10.2933, lng: 123.8770 }, // Snapped to intersection
+  "Mambaling Flyover":               { lat: 10.2933, lng: 123.8770 },
   "Guadalupe":                       { lat: 10.3125, lng: 123.8782 }, 
   "Banawa":                          { lat: 10.3142, lng: 123.8820 }, 
   "Urgello":                         { lat: 10.3030, lng: 123.8885 }, 
@@ -41,11 +41,11 @@ const COORDS = {
   "Pit-os":                          { lat: 10.3705, lng: 123.9210 }, 
   "Talamban":                        { lat: 10.3642, lng: 123.9160 }, 
   "Mandaue":                         { lat: 10.3446, lng: 123.9424 }, 
-  "Bulacao":                         { lat: 10.2730, lng: 123.8480 }, // Snapped to N. Bacalso
-  "Tabunok":                         { lat: 10.2600, lng: 123.8430 }, // Snapped to N. Bacalso
+  "Bulacao":                         { lat: 10.2730, lng: 123.8480 }, 
+  "Tabunok":                         { lat: 10.2600, lng: 123.8430 },
   "Inayawan":                        { lat: 10.2745, lng: 123.8695 }, 
-  "Pardo":                           { lat: 10.2815, lng: 123.8580 }, // Snapped to N. Bacalso (Pardo Church area)
-  "Quiot / Basak San Nicolas":       { lat: 10.2850, lng: 123.8640 }, // Quiot proper / inner hub
+  "Pardo":                           { lat: 10.2815, lng: 123.8580 },
+  "Quiot / Basak San Nicolas":       { lat: 10.2850, lng: 123.8640 }, 
   "Talisay City":                    { lat: 10.2520, lng: 123.8390 }, 
   "Minglanilla":                     { lat: 10.2442, lng: 123.7975 }, 
   "Plaza Housing":                   { lat: 10.3418, lng: 123.8880 }, 
@@ -57,7 +57,7 @@ const COORDS = {
   "Capitol":                         { lat: 10.3164, lng: 123.8907 }, 
   "Mango Square / Escario":          { lat: 10.3175, lng: 123.8925 }, 
   "Salinas Drive":                   { lat: 10.3340, lng: 123.9012 }, 
-  "N. Bacalso Ave":                  { lat: 10.2955, lng: 123.8790 }, // Adjusted to bridge Mambaling and CITU perfectly
+  "N. Bacalso Ave":                  { lat: 10.2955, lng: 123.8790 },
 
   // ── Malls / Markets ───────────────────────────────────────────────────────
   "Robinsons Place":                 { lat: 10.3105, lng: 123.8935 }, 
