@@ -1,5 +1,5 @@
 // ── Jee.ply · Jeepney Routes ──────────────────────────────────────────────
-// Routes verified via LTFRB Region 7 franchise data and CommuteTour.
+// Routes verified via LTFRB Region 7 franchise data and CommuteTour guidelines.
 //
 // Helper: shorthand to build a stop object from COORDS
 const stop = (name) => ({ name, ...COORDS[name] });
@@ -9,12 +9,11 @@ const JEEP_ROUTES = {
   // ── TRADITIONAL CITY ROUTES ─────────────────────────────────────────────
 
   "01K": {
-    name: "Urgello – Parkmall",
+    name: "Urgello – Parkmall via SM",
     color: "#e63946",
     stops: [
       stop("Urgello"),
-      stop("V. Rama Ave"),
-      stop("South Bus Terminal"),
+      stop("Elizabeth Mall (E-Mall)"),
       stop("Colon"),
       stop("Carbon"),
       stop("Pier"),
@@ -24,33 +23,20 @@ const JEEP_ROUTES = {
   },
 
   "02B": {
-    name: "South Bus Terminal – Colon",
+    name: "South Bus Terminal – Pier via Colon",
     color: "#457b9d",
     stops: [
       stop("South Bus Terminal"),
-      stop("Urgello"),
-      stop("Fuente Osmeña"),
-      stop("Colon")
+      stop("Elizabeth Mall (E-Mall)"),
+      stop("Colon"),
+      stop("Cathedral"),
+      stop("Pier")
     ]
   },
 
   "03A": {
-    name: "Mabolo – Carbon",
+    name: "Mabolo – Carbon via Ramos",
     color: "#2a9d8f",
-    stops: [
-      stop("Mabolo"),
-      stop("IT Park"),
-      stop("Ayala Center Cebu"),
-      stop("Fuente Osmeña"),
-      stop("Colon"),
-      stop("Carbon"),
-      stop("SM City Cebu")
-    ]
-  },
-
-  "03B": {
-    name: "Mabolo – Carbon (via Maxilom)",
-    color: "#c9a227",
     stops: [
       stop("Mabolo"),
       stop("SM City Cebu"),
@@ -60,23 +46,36 @@ const JEEP_ROUTES = {
     ]
   },
 
+  "03B": {
+    name: "Mabolo – Carbon (via Maxilom)",
+    color: "#c9a227",
+    stops: [
+      stop("Mabolo"),
+      stop("SM City Cebu"),
+      stop("Mango Square / Escario"),
+      stop("Fuente Osmeña"),
+      stop("Colon"),
+      stop("Carbon")
+    ]
+  },
+
   "03Q": {
-    name: "Ayala – SM",
+    name: "Ayala – SM City Cebu",
     color: "#f4a261",
     stops: [
       stop("Ayala Center Cebu"),
-      stop("IT Park"),
+      stop("Mabolo"),
       stop("SM City Cebu")
     ]
   },
 
   "04B": {
-    name: "Lahug – Carbon",
+    name: "Lahug – Carbon via Jones",
     color: "#6a4c93",
     stops: [
       stop("Lahug (Jy Square)"),
       stop("Gorordo Ave"),
-      stop("Capitol"),
+      stop("Mango Square / Escario"),
       stop("Fuente Osmeña"),
       stop("Robinsons Place"),
       stop("Colon"),
@@ -85,17 +84,17 @@ const JEEP_ROUTES = {
   },
 
   "04L": {
-    name: "Lahug – Ayala",
+    name: "Lahug – Ayala Center Cebu",
     color: "#219ebc",
     stops: [
       stop("Lahug (Jy Square)"),
-      stop("IT Park"),
+      stop("Gorordo Ave"),
       stop("Ayala Center Cebu")
     ]
   },
 
   "06B": {
-    name: "Guadalupe – Carbon",
+    name: "Guadalupe – Carbon via Jones",
     color: "#fb8500",
     stops: [
       stop("Guadalupe"),
@@ -108,11 +107,12 @@ const JEEP_ROUTES = {
   },
 
   "06H": {
-    name: "Guadalupe – SM",
+    name: "Guadalupe – SM via Ayala",
     color: "#023047",
     stops: [
       stop("Guadalupe"),
       stop("Capitol"),
+      stop("Escario Central Mall"),
       stop("Ayala Center Cebu"),
       stop("SM City Cebu")
     ]
@@ -132,7 +132,7 @@ const JEEP_ROUTES = {
   },
 
   "08F": {
-    name: "Alumnos – SM",
+    name: "Alumnos – SM City Cebu",
     color: "#80b918",
     stops: [
       stop("Alumnos"),
@@ -152,12 +152,13 @@ const JEEP_ROUTES = {
       stop("Punta Princesa"),
       stop("CITU"),
       stop("South Bus Terminal"),
+      stop("Elizabeth Mall (E-Mall)"),
       stop("Colon")
     ]
   },
 
   "09G": {
-    name: "Basak San Nicolas – Colon via Punta (alt)",
+    name: "Basak San Nicolas – Colon via Punta (Alt)",
     color: "#b71c1c",
     stops: [
       stop("Quiot / Basak San Nicolas"),
@@ -179,13 +180,13 @@ const JEEP_ROUTES = {
       stop("Basak San Nicolas"),
       stop("CITU"),
       stop("South Bus Terminal"),
-      stop("Urgello"),
+      stop("Elizabeth Mall (E-Mall)"),
       stop("Colon")
     ]
   },
 
   "10H": {
-    name: "Bulacao – SM via Highway",
+    name: "Bulacao – SM City Cebu via Highway & Imus",
     color: "#37474f",
     stops: [
       stop("Bulacao"),
@@ -194,19 +195,19 @@ const JEEP_ROUTES = {
       stop("Mambaling Flyover"),
       stop("CITU"),
       stop("South Bus Terminal"),
-      stop("Ayala Center Cebu"),
+      stop("Colon"),
       stop("SM City Cebu")
     ]
   },
 
   "11A": {
-    name: "Inayawan – Colon",
+    name: "Inayawan – Colon via Highway",
     color: "#6a994e",
     stops: [
       stop("Inayawan"),
       stop("Quiot / Basak San Nicolas"),
       stop("South Bus Terminal"),
-      stop("Urgello"),
+      stop("Elizabeth Mall (E-Mall)"),
       stop("Colon")
     ]
   },
@@ -214,25 +215,24 @@ const JEEP_ROUTES = {
   // ── MID/NORTH CITY ROUTES ───────────────────────────────────────────────
 
   "12D": {
-    name: "Labangon – Colon",
+    name: "Labangon – Colon via V. Rama",
     color: "#0077b6",
     stops: [
       stop("Labangon Market"),
-      stop("Labangon"),
-      stop("Urgello"),
-      stop("Fuente Osmeña"),
+      stop("V. Rama Ave"),
+      stop("South Bus Terminal"),
+      stop("Elizabeth Mall (E-Mall)"),
       stop("Colon")
     ]
   },
 
   "12G": {
-    name: "Labangon/Punta Princesa – SM",
+    name: "Punta Princesa – SM City Cebu via V. Rama",
     color: "#1976d2",
     stops: [
       stop("Punta Princesa"),
       stop("Labangon Market"),
-      stop("Miller Hospital"),
-      stop("CITU"),
+      stop("V. Rama Ave"),
       stop("Taboan Market"),
       stop("City Hall"),
       stop("Pier"),
@@ -241,64 +241,68 @@ const JEEP_ROUTES = {
   },
 
   "12L": {
-    name: "Tisa/Labangon – Ayala",
+    name: "Tisa/Labangon – Ayala via Tres de Abril",
     color: "#0d47a1",
     stops: [
       stop("Tisa"),
       stop("Punta Princesa"),
-      stop("Labangon Market"),
-      stop("Miller Hospital"),
-      stop("CITU"),
+      stop("Labangon"),         // Tres de Abril intersection
+      stop("Miller Hospital"),  // Tres de Abril stretch
       stop("N. Bacalso Ave"),
+      stop("South Bus Terminal"),
       stop("USC South Campus"),
       stop("Vicente Sotto Hosp."),
       stop("Mango Square / Escario"),
-      stop("USC North Campus"),
       stop("Ayala Center Cebu")
     ]
   },
 
   "13C": {
-    name: "Talamban – Colon",
+    name: "Talamban – Colon / Carbon via Ramos",
     color: "#ae2012",
     stops: [
       stop("Talamban"),
-      stop("Apas"),
-      stop("Lahug (Jy Square)"),
-      stop("Gorordo Ave"),
+      stop("USC Talamban Campus (TC)"),
+      stop("Banilad Town Centre (BTC)"),
+      stop("Gaisano Country Mall"),
+      stop("Ayala Center Cebu"),
       stop("Fuente Osmeña"),
-      stop("Colon")
+      stop("Colon"),
+      stop("Carbon")
     ]
   },
 
   "14D": {
-    name: "Ayala – Colon",
+    name: "Ayala – Colon via Ramos",
     color: "#005f73",
     stops: [
       stop("Ayala Center Cebu"),
       stop("Escario Central Mall"),
-      stop("Urgello"),
+      stop("Capitol"),
       stop("Fuente Osmeña"),
+      stop("Robinsons Place"),
       stop("Colon")
     ]
   },
 
   "17B": {
-    name: "Apas – Carbon",
+    name: "Apas – Carbon via Jones",
     color: "#0a9396",
     stops: [
       stop("Apas"),
       stop("IT Park"),
+      stop("Salinas Drive"),
+      stop("Lahug (Jy Square)"),
       stop("Capitol"),
       stop("Fuente Osmeña"),
-      stop("Urgello"),
+      stop("Robinsons Place"),
       stop("Colon"),
       stop("Carbon")
     ]
   },
 
   "20A": {
-    name: "Mandaue – Ayala",
+    name: "Mandaue – Ayala via Mabolo",
     color: "#7209b7",
     stops: [
       stop("Mandaue"),
@@ -310,26 +314,26 @@ const JEEP_ROUTES = {
   },
 
   "21A": {
-    name: "Mandaue – Cathedral",
+    name: "Mandaue – Cathedral / Carbon",
     color: "#560bad",
     stops: [
       stop("Mandaue"),
       stop("SM City Cebu"),
       stop("Pier"),
-      stop("Carbon"),
-      stop("Cathedral")
+      stop("Cathedral"),
+      stop("Carbon")
     ]
   },
 
   "62B": {
-    name: "Pit-os – Carbon",
+    name: "Pit-os – Carbon via Ayala & Ramos",
     color: "#3a0ca3",
     stops: [
       stop("Pit-os"),
       stop("Talamban"),
-      stop("Mabolo"),
-      stop("Apas"),
-      stop("IT Park"),
+      stop("USC Talamban Campus (TC)"),
+      stop("Banilad Town Centre (BTC)"),
+      stop("Ayala Center Cebu"),
       stop("Fuente Osmeña"),
       stop("Colon"),
       stop("Carbon")
@@ -410,7 +414,7 @@ const JEEP_ROUTES = {
   },
 
   "MJ-1": {
-    name: "Mango Jeep (Modern): Talisay ↔ IT Park",
+    name: "Mango Jeep: Talisay ↔ IT Park",
     color: "#fca311",
     stops: [
       stop("Poblacion Talisay"),
@@ -438,5 +442,4 @@ const JEEP_ROUTES = {
       stop("IT Park")
     ]
   }
-
 };
