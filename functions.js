@@ -29,7 +29,7 @@ function nearestStop(route, lat, lng) {
 // Returns up to 5 best routes (direct + 1-transfer) sorted by travel time
 function findRoutes(originLat, originLng, destLat, destLng) {
   const results = [];
-  const WALK_THRESH = 0.7;   // max walk distance to/from a stop (km)
+  const WALK_THRESH = 0.5;   // max walk distance to/from a stop (km)
   const XFER_THRESH = 0.45;  // max walk distance between transfer stops (km)
 
   // 1. Direct routes
