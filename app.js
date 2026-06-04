@@ -12,12 +12,14 @@ const cebuBounds = L.latLngBounds(
 const map = L.map('map', {
   maxBounds: cebuBounds,
   maxBoundsViscosity: 1.0, // Makes the boundary completely solid
-  minZoom: 9 // Prevents users from zooming out past the island
+  minZoom: 10, // Prevents users from zooming out past the island,
+  zoomControl: false // Removes Zoom Buttons
 }).setView([10.3157, 123.8854], 13);
 
 // Default OpenStreetMap tiles
+map.attributionControl.setPosition('topright');
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '© OpenStreetMap', maxZoom: 19
+  attribution: '© OpenStreetMaps', maxZoom: 19
 }).addTo(map);
 
 let originMarker = null, destMarker = null;

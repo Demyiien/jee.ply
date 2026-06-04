@@ -1,0 +1,86 @@
+:root {
+    --jeepney-maroon: #961619;
+    --jeepney-red: #D32B19;
+    --jeepney-peach: #F75E43;
+    --jeepney-orange: #D65E00;
+    --jeepney-yellow: #F1C647;
+    --jeepney-olive: #A4AF1A;
+    --jeepney-green: #24A219;
+    --jeepney-cyan: #00BC95;
+    --jeepney-aqua: #1492AD;
+    --jeepney-blue: #0C1C93;
+    --jeepney-purple: #6C1DA3;
+    --jeepney-magenta: #C5409C;
+    --jeepney-pink: #FF547D;
+    --jeepney-brown: #684729;
+    --jeepney-gray: #3D3F4A;
+}
+
+.ride-code {
+    background-color: var(--jeepney-gray);
+}
+
+.ride-code[data-code^="01"],
+.ride-code[data-code^="02"] {
+    background-color: var(--jeepney-orange);
+}
+
+.ride-code[data-code^="03"] {
+    background-color: var(--jeepney-olive);
+}
+
+.ride-code[data-code^="04"],
+.ride-code[data-code^="14"],
+.ride-code[data-code^="15"],
+.ride-code[data-code^="17"] {
+    background-color: var(--jeepney-purple);
+}
+
+.ride-code[data-code^="06"],
+.ride-code[data-code^="07"] {
+    background-color: var(--jeepney-pink);
+}
+
+.ride-code[data-code^="08"],
+.ride-code[data-code^="11"] {
+    background-color: var(--jeepney-yellow);
+}
+
+.ride-code[data-code^="09"],
+.ride-code[data-code^="10"],
+.ride-code[data-code^="44"],
+.ride-code[data-code^="41"] {
+    background-color: var(--jeepney-green);
+}
+
+.ride-code[data-code^="12"] {
+    background-color: var(--jeepney-aqua);
+}
+
+.ride-code[data-code^="13"],
+.ride-code[data-code^="62"],
+.ride-code[data-code^="64"],
+.ride-code[data-code^="65"] {
+    background-color: var(--jeepney-red);
+}
+
+.ride-code[data-code^="20"],
+.ride-code[data-code^="21"],
+.ride-code[data-code^="22"],
+.ride-code[data-code^="24"],
+.ride-code[data-code^="25"] {
+    background-color: var(--jeepney-magenta);
+}
+
+.ride-code[data-code^="23"],
+.ride-code[data-code^="MI"] {
+    background-color: var(--jeepney-cyan);
+}
+
+.ride-code[data-code^="MY"] {
+    background-color: var(--jeepney-blue);
+}
+
+.ride-code[data-code^="CIBUS"] {
+    background-color: var(--jeepney-brown);
+}

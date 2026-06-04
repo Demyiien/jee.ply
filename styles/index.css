@@ -1,0 +1,154 @@
+:root {
+    --blue: #19215F;
+    --light-yellow: #FDF4E5;
+    --gray: #3D3F4A;
+    --border-black: #0000001a;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+
+    font-family: "Work Sans";
+    font-weight: 500;
+    font-variant-ligatures: common-ligatures;
+    letter-spacing: -0.36px;
+    /* outline: red solid 1px; */
+}
+
+body {
+    height: 100dvh;
+    /* overflow: hidden; */
+}
+
+body > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#map {
+    flex: 1;
+    height: 100%;
+    width: 100%;
+    z-index: 0;
+}
+
+.leaflet-tile-pane {
+    filter: grayscale(60%) opacity(0.5);
+}
+
+#bottom-ui {
+    top: unset;
+    bottom: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+#bottom-ui::before {
+    content: "";
+    position: absolute;
+    top: unset;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+
+    backdrop-filter: blur(10px);
+    mask: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 1) 100%
+    );
+}
+
+.travel-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75em;
+    margin: 0.75em;;
+}
+
+.stop {
+    display: flex;
+    flex-direction: row;
+    gap: 0.625em;
+    padding: 1em;
+
+    border-radius: 8px;
+    border: 1px solid var(--border-black);
+    background-color: var(--light-yellow);
+}
+
+.icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+
+    color: white;
+    font-size: 1.125em;
+    background-color: var(--blue);
+    text-align: center;
+    border-radius: 100%;
+}
+
+.point-info {
+    width: 100%;
+    overflow: hidden;
+}
+
+.address-input {
+    min-width: 100%;
+    max-width: 100%;
+    background-color: transparent;
+    border: none;
+    font-size: 1.125em;
+    line-height: 1em;
+    field-sizing: content;
+
+    overflow: hidden;
+    resize: none;
+}
+
+.address-input:not(:focus-within) {
+    max-height: 2em;
+    text-overflow: ellipsis;
+}
+
+.address {
+    font-size: 0.925em;
+    font-weight: 400;
+    line-height: 0.925em;
+
+    color: black;
+    opacity: 0.75;
+}
+
+.cta-group {
+    display: flex;;
+    flex-direction: row;
+    gap: 0.75em;
+}
+
+.cta {
+    width: 100%;
+    padding: 0.75em 1em;
+    background-color: transparent;
+    border: none;
+    border-radius: 8px;
+    
+    font-size: 1.125em;
+    font-weight: 600;
+    color: white;
+    background-color: var(--gray);
+}
+
+.primary {
+    background-color: var(--blue);
+}

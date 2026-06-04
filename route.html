@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>Jee.ply</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <link rel="stylesheet" href="./styles/jeepneys.css" />
+    <link rel="stylesheet" href="./styles/routes.css" />
+</head>
+<body>
+    <div id="map"></div>
+    <div id="bottom-ui">
+        <div class="travel-info">
+            <div class="stop" id="start-input">
+                <div class="icon">S</div>
+                <p class="stop-name">Lorem, ipsum dolor.</p>
+            </div>
+            <!-- BUTTON GROUP -->
+            <!-- <div class="ride-choices">
+                <div class="ride">
+                    <div class="general-info">
+                        <p class="ride-location start-name">Cebu Institute of Technology-University</p>
+                        <img src="./assets/arrow-right.svg">
+                        <p class="ride-location end-name">Colon Obelisk</p>
+                        <p class="ride-fare">P17</p>
+                    </div>
+                    <div class="ride-info">
+                        <p class="ride-distance">2.8 km</p>
+                        <p class="ride-separator">•</p>
+                        <p class="ride-time">16 min</p>
+                    </div>
+                    <div class="ride-codes">
+                        <p class="ride-code" data-code="01K">01K</p>
+                        <p class="ride-code" data-code="02A">02A</p>
+                        <p class="ride-code" data-code="03B">03B</p>
+                        <p class="ride-code" data-code="04B">04B</p>
+                        <p class="ride-code" data-code="06Q">06Q</p>
+                        <p class="ride-code" data-code="07K">07K</p>
+                        <p class="ride-code" data-code="08P">08P</p>
+                        <p class="ride-code" data-code="09U">09U</p>
+                        <p class="ride-code" data-code="10K">10K</p>
+                        <p class="ride-code" data-code="11J">11J</p>
+                        <p class="ride-code" data-code="MI-1">MI-1</p>
+                        <p class="ride-code" data-code="62">62</p>
+                    </div>
+                </div>
+                <div class="ride">
+                    <div class="general-info">
+                        <p class="ride-location start-name">Cebu Institute of Technology-University</p>
+                        <img src="./assets/arrow-right.svg">
+                        <p class="ride-location end-name">Colon Obelisk</p>
+                        <p class="ride-fare">P17</p>
+                    </div>
+                    <div class="ride-info">
+                        <p class="ride-distance">2.8 km</p>
+                        <p class="ride-separator">•</p>
+                        <p class="ride-time">16 min</p>
+                    </div>
+                    <div class="ride-codes">
+                        <p class="ride-code" data-code="01K">01K</p>
+                        <p class="ride-code" data-code="02A">02A</p>
+                        <p class="ride-code" data-code="03B">03B</p>
+                        <p class="ride-code" data-code="04B">04B</p>
+                        <p class="ride-code" data-code="06Q">06Q</p>
+                        <p class="ride-code" data-code="07K">07K</p>
+                        <p class="ride-code" data-code="08P">08P</p>
+                        <p class="ride-code" data-code="09U">09U</p>
+                        <p class="ride-code" data-code="10K">10K</p>
+                        <p class="ride-code" data-code="11J">11J</p>
+                        <p class="ride-code" data-code="MI-1">MI-1</p>
+                        <p class="ride-code" data-code="62">62</p>
+                    </div>
+                </div>
+                <div class="ride">
+                    <div class="general-info">
+                        <p class="ride-location start-name">Cebu Institute of Technology-University</p>
+                        <img src="./assets/arrow-right.svg">
+                        <p class="ride-location end-name">Colon Obelisk</p>
+                        <p class="ride-fare">P17</p>
+                    </div>
+                    <div class="ride-info">
+                        <p class="ride-distance">2.8 km</p>
+                        <p class="ride-separator">•</p>
+                        <p class="ride-time">16 min</p>
+                    </div>
+                    <div class="ride-codes">
+                        <p class="ride-code" data-code="01K">01K</p>
+                        <p class="ride-code" data-code="02A">02A</p>
+                        <p class="ride-code" data-code="03B">03B</p>
+                        <p class="ride-code" data-code="04B">04B</p>
+                        <p class="ride-code" data-code="06Q">06Q</p>
+                        <p class="ride-code" data-code="07K">07K</p>
+                        <p class="ride-code" data-code="08P">08P</p>
+                        <p class="ride-code" data-code="09U">09U</p>
+                        <p class="ride-code" data-code="10K">10K</p>
+                        <p class="ride-code" data-code="11J">11J</p>
+                        <p class="ride-code" data-code="MI-1">MI-1</p>
+                        <p class="ride-code" data-code="62">62</p>
+                    </div>
+                </div>
+            </div> -->
+            <div class="ride">
+                <div class="general-info">
+                    <p class="ride-location start-name">Cebu Institute of Technology-University</p>
+                    <img src="./assets/arrow-right.svg">
+                    <p class="ride-location end-name">Colon Obelisk</p>
+                    <p class="ride-fare">P17</p>
+                </div>
+                <div class="ride-info">
+                    <p class="ride-distance">2.8 km</p>
+                    <p class="ride-separator">•</p>
+                    <p class="ride-time">16 min</p>
+                </div>
+                <div class="ride-codes">
+                    <p class="ride-code" data-code="01K">01K</p>
+                    <p class="ride-code" data-code="02A">02A</p>
+                    <p class="ride-code" data-code="03B">03B</p>
+                    <p class="ride-code" data-code="04B">04B</p>
+                    <p class="ride-code" data-code="06Q">06Q</p>
+                    <p class="ride-code" data-code="07K">07K</p>
+                    <p class="ride-code" data-code="08P">08P</p>
+                    <p class="ride-code" data-code="09U">09U</p>
+                    <p class="ride-code" data-code="10K">10K</p>
+                    <p class="ride-code" data-code="11J">11J</p>
+                    <p class="ride-code" data-code="MI-1">MI-1</p>
+                    <p class="ride-code" data-code="62">62</p>
+                </div>
+            </div>
+            <div class="stop" id="end-input">
+                <div class="icon">E</div>
+                <p class="stop-name">Lorem ipsum dolor sit.</p>
+            </div>
+        </div>
+    </div>
+    <div id="float-container">
+        <div id="floaters">
+            <div class="ride-summary">
+                <div class="jeepney-icon">
+                    <img src="./assets/jeepney.svg" id="jeepney">
+                </div>
+                <div class="summary-info">
+                    <div class="info-entry">
+                        <p class="info-name">Number of Rides</p>
+                        <p class="info-answer">2 rides</p>
+                    </div>
+                    <div class="info-entry">
+                        <p class="info-name">Travel Time</p>
+                        <p class="info-answer">22 mins</p>
+                    </div>
+                    <div class="info-entry">
+                        <p class="info-name">Kilometers Travelled</p>
+                        <p class="info-answer">12.35 km</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cta-group">
+                <button class="cta">Back</button>
+                <button class="cta primary">Start Trip</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data -->
+    <script src="coordinates.js"></script>
+    <script src="routes.js"></script>
+    <script src="landmarks.js"></script>
+
+    <!-- Logic -->
+    <script src="functions.js"></script>
+
+    <!-- App / UI -->
+    <script src="app.js"></script>
+
+</body>
+</html>

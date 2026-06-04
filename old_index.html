@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>Jee.ply</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <link rel="stylesheet" href="style2.css" />
+</head>
+<body>
+    <div id="app">
+        <div id="sidebar">
+            <div id="header">
+                <h1>Jee.ply</h1>
+                <p>Cebu City Jeepney Route Finder</p>
+            </div>
+            <div id="panel">
+                <div class="input-row">
+                    <label>A</label>
+                    <div class="input-wrap">
+                        <input type="text" id="origin-input" placeholder="Pick-up location..." autocomplete="off" />
+                        <button class="pin-btn" id="pin-origin-btn" title="Pin origin on map"></button>
+                        <div class="suggestions" id="origin-suggestions" style="display:none"></div>
+                    </div>
+                </div>
+                <div class="input-row">
+                    <label>B</label>
+                    <div class="input-wrap">
+                        <input type="text" id="dest-input" placeholder="Destination..." autocomplete="off" />
+                        <button class="pin-btn" id="pin-dest-btn" title="Pin destination on map"></button>
+                        <div class="suggestions" id="dest-suggestions" style="display:none"></div>
+                    </div>
+                </div>
+                <button id="go-btn">Find Jeepney Routes</button>
+            </div>
+            <div id="pin-hint">Click anywhere on the map to pin location</div>
+            <div id="status-bar"></div>
+            <div id="results"></div>
+        </div>
+        <div id="map"></div>
+    </div>
+
+    <!-- Data -->
+    <script src="coordinates.js"></script>
+    <script src="routes.js"></script>
+    <script src="landmarks.js"></script>
+
+    <!-- Logic -->
+    <script src="functions.js"></script>
+
+    <!-- App / UI -->
+    <script src="app.js"></script>
+
+</body>
+</html>
