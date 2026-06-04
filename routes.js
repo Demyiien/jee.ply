@@ -383,7 +383,7 @@ const JEEP_ROUTES = {
     stops: [
       stop("SM City Cebu"),
       stop("Pier"),
-      stop("City Hall"),
+      stop("Plaza Independencia"),
       stop("SM Seaside City Cebu"),
       stop("Il Corso Lifemalls"),
       stop("Talisay City")

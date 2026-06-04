@@ -16,6 +16,7 @@ const COORDS = {
   "Alumnos":                         { lat: 10.28950, lng: 123.87700 }, // Alumnos street corner
   "Cathedral":                       { lat: 10.29520, lng: 123.90230 }, // Manalili side
   "City Hall":                       { lat: 10.29320, lng: 123.90150 }, // Magellan's Cross / City Hall Square
+  "Plaza Independencia":             { lat: 10.29275, lng: 123.90424}, // Plaza Independencia corner
 
   // ── Modern Mega-Developments ──────────────────────────────────────────────
   "SM Seaside City Cebu":            { lat: 10.28114, lng: 123.88050 }, // Mountain Wing Transport Hub

@@ -60,6 +60,7 @@ const LANDMARKS = [
   { name: "Cebu City Hall",                    ...COORDS["City Hall"] },
   { name: "Cebu Provincial Capitol",           ...COORDS["Capitol"] },
   { name: "Cebu Metropolitan Cathedral",       ...COORDS["Cathedral"] },
+  { name: "Plaza Independencia",               ...COORDS["Plaza Independencia"] },
 
   // ── Schools ───────────────────────────────────────────────────────────────
   { name: "University of San Carlos (USC) Main", ...COORDS["USC Main"] },
