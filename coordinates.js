@@ -10,7 +10,7 @@ const COORDS = {
   "Ayala Center Cebu":               { lat: 10.31956, lng: 123.90566 }, // Ayala PUV Terminal (Luzon Ave)
   "Parkmall":                        { lat: 10.32550, lng: 123.93480 }, // Parkmall PUJ Terminal
   "IT Park":                         { lat: 10.33005, lng: 123.90487 }, // IT Park Transport Terminal
-  "South Bus Terminal":              { lat: 10.29836, lng: 123.89265 }, // N. Bacalso entrance
+  "South Bus Terminal":              { lat: 10.29844, lng: 123.89328 }, // N. Bacalso entrance
   "North Bus Terminal":              { lat: 10.31480, lng: 123.91820 }, // NBT (Now located at SM City Cebu)
   "Pier":                            { lat: 10.30335, lng: 123.91250 }, // Pier 1 entrance
   "Alumnos":                         { lat: 10.28950, lng: 123.87700 }, // Alumnos street corner
