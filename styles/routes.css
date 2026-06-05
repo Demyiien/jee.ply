@@ -42,7 +42,7 @@ body {
     max-width: 100dvw;
 
     backdrop-filter: blur(2px);
-    overflow: scroll;
+    overflow: auto;
 }
 
 .travel-info {
