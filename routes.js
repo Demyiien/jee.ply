@@ -7,18 +7,49 @@ const stop = (name) => ({ name, ...COORDS[name] });
 const JEEP_ROUTES = {
 
   // ── TRADITIONAL CITY ROUTES ─────────────────────────────────────────────
-
   "01K": {
-    name: "Urgello – Parkmall via SM",
+    name: "Urgello - Parkmall",
     color: "#e63946",
     stops: [
-      stop("Urgello"),
-      stop("Elizabeth Mall (E-Mall)"),
-      stop("Colon"),
-      stop("Carbon"),
-      stop("Pier"),
-      stop("SM City Cebu"),
-      stop("Parkmall")
+      stop("Urgello Transit"),
+      stop("Sacred Heart Hospital"),
+      stop("SWU PHINMA Transit"),
+      stop("ACT Transit"),
+      stop("E-Mall (Leon Kilat Entrance)"),
+      stop("UC-Main (Leon Kilat Entrance)"),
+      stop("Metro Colon Transit"),
+      stop("Museo Sugbo"),
+      stop("Gen. Maxilom Ave. Transit"),
+      stop("GMall of Cebu"),
+      stop("SM City Cebu (Xiamen Entrance)"),
+      stop("F. Cabahug Transit"),
+      stop("SM Hypermarket"),
+      stop("M. Logarta Transit"),
+      stop("Cebu Doctors University (CDU)"),
+      stop("Ouano Ave. Transit"),
+      stop("City Times Square Transit (Mantawi)"),
+      stop("Parkmall Terminal"),
+    ]
+  },
+
+  "01K-R": {
+    name: "Parkmall - Urgello",
+    color: "#e63946",
+    stops: [
+      stop("Parkmall Terminal"),
+      stop("E.O. Perez Transit"),
+      stop("Albaño Transit"),
+      stop("F. Cabahug Transit"),
+      stop("Queen City Memorial Garden"),
+      stop("G. Gaisano Transit"),
+      stop("B. Benedicto Transit"),
+      stop("T. Padilla Transit"),
+      stop("Legazpi Transit"),
+      stop("Leon Kilat Transit"),
+      stop("ACT Transit"),
+      stop("SWU PHINMA Transit"),
+      stop("Sacred Heart Hospital"),
+      stop("Urgello Transit"),
     ]
   },
 
@@ -378,15 +409,16 @@ const JEEP_ROUTES = {
   // ── MODERN BUSES & JEEPS ────────────────────────────────────────────────
 
   "MYB-1": {
-    name: "MyBus: SM City ↔ Talisay (via SRP)",
+    name: "MyBus: SM Seaside to SM City",
     color: "#118ab2",
     stops: [
-      stop("SM City Cebu"),
-      stop("Pier"),
+      stop("SM Seaside MyBus Pick-Up Area (Mountain Wing)"),
+      stop("Maritima Ruins"),
       stop("Plaza Independencia"),
-      stop("SM Seaside City Cebu"),
-      stop("Il Corso Lifemalls"),
-      stop("Talisay City")
+      stop("Robinsons Galleria Transit (Sr. Osmeña)"),
+      stop("Radisson Blu Transit"),
+      stop("Kaohsiung St. Transit"),
+      stop("SM City MyBus Terminal"),
     ]
   },
 
@@ -414,19 +446,24 @@ const JEEP_ROUTES = {
   },
 
   "MJ-1": {
-    name: "Mango Jeep: Talisay ↔ IT Park",
+    name: "Mango Jeep: Talisay - IT Park",
     color: "#fca311",
     stops: [
-      stop("Poblacion Talisay"),
-      stop("Tabunok"),
-      stop("Bulacao"),
-      stop("Pardo"),
-      stop("CITU"),
-      stop("South Bus Terminal"),
-      stop("Fuente Osmeña"),
-      stop("Escario Central Mall"),
-      stop("Ayala Center Cebu"),
-      stop("IT Park")
+      stop("Mango Jeep Terminal (Poblacion)"),
+      stop("San Isidro Transit"),
+      stop("Gaisano Tabunok Terminal"),
+      stop("Bulacao Bus Stop"),
+      stop("Shopwise Transit"),
+      stop("Tisa Barangay Hall"),
+      stop("Katipunan Transit"),
+      stop("Cebu City Science High School"),
+      stop("Paseo Arcenas Transit"),
+      stop("Capitol Square Transit"),
+      stop("Sacred Heart - Capitol Transit"),
+      stop("Gorordo Ave. Transit"),
+      stop("UP Cebu Transit"),
+      stop("Sudlon Transit"),
+      stop("IT Park Terminal")
     ]
   },
 
