@@ -413,7 +413,6 @@ const JEEP_ROUTES = {
     color: "#118ab2",
     stops: [
       stop("SM Seaside MyBus Pick-Up Area (Mountain Wing)"),
-      stop("Maritima Ruins"),
       stop("Plaza Independencia"),
       stop("Robinsons Galleria Transit (Sr. Osmeña)"),
       stop("Radisson Blu Transit"),
