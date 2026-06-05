@@ -1,0 +1,700 @@
+/* ── Reset ─────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* UI Colors */
+  --blue: #19215F;
+  --off-white: #FFFDFA;
+  --light-yellow: #FDF4E5;
+  --gray: #3D3F4A;
+  --border-black: #0000001a;
+
+  /* Jeepney Route Colors */
+  --jeepney-maroon: #961619;
+  --jeepney-red: #D32B19;
+  --jeepney-peach: #F75E43;
+  --jeepney-orange: #D65E00;
+  --jeepney-yellow: #F1C647;
+  --jeepney-olive: #A4AF1A;
+  --jeepney-green: #24A219;
+  --jeepney-cyan: #00BC95;
+  --jeepney-aqua: #1492AD;
+  --jeepney-blue: #0C1C93;
+  --jeepney-purple: #6C1DA3;
+  --jeepney-magenta: #C5409C;
+  --jeepney-pink: #FF547D;
+  --jeepney-brown: #684729;
+  --jeepney-gray: #3D3F4A;
+}
+
+/* ── Base ──────────────────────────────────────────────────────────────── */
+html, body {
+  height: 100%;
+  overflow: hidden;
+  /* Updated to use Work Sans with fallback */
+  font-family: "Work Sans", 'Space Mono', monospace; 
+  font-weight: 500;
+  font-variant-ligatures: common-ligatures;
+  letter-spacing: -0.36px;
+  font-size: 13px;
+  background: var(--off-white);
+  color: #111;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── App shell ─────────────────────────────────────────────────────────── */
+#app {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* ── Map ───────────────────────────────────────────────────────────────── */
+#map {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.leaflet-tile-pane {
+  filter: grayscale(100%) brightness(0.88);
+}
+
+/* ── Map logo (visible in peek state) ─────────────────────────────────── */
+#map-logo {
+  position: fixed;
+  top: 18px;
+  left: 16px;
+  z-index: 50;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.logo-text {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.5px;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}
+
+.logo-sub {
+  font-size: 9px;
+  color: rgba(255,255,255,0.75);
+  letter-spacing: 0.4px;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+/* ── Pin mode hint banner ──────────────────────────────────────────────── */
+#pin-hint {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #111;
+  color: #fff;
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  z-index: 600;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+}
+
+#pin-hint.visible {
+  display: flex;
+}
+
+#pin-cancel-btn {
+  border: 1px solid rgba(255,255,255,0.4);
+  background: transparent;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+/* ── Bottom Sheet ──────────────────────────────────────────────────────── */
+#bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  /* Total height: nearly full screen, leaving ~56px of map at top when open */
+  height: calc(100dvh - 56px);
+  background: #fff;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -2px 24px rgba(0,0,0,0.18), 0 -1px 0 rgba(0,0,0,0.06);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  /* Initial: mid state via JS on load */
+  transform: translateY(100%);
+  will-change: transform;
+  transition: transform 0.36s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Handle area ───────────────────────────────────────────────────────── */
+#sheet-handle-area {
+  flex-shrink: 0;
+  padding: 10px 0 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: grab;
+  user-select: none;
+}
+
+#sheet-handle-area:active { cursor: grabbing; }
+
+#sheet-handle {
+  width: 36px;
+  height: 4px;
+  background: #d0d0d0;
+  border-radius: 2px;
+}
+
+/* ── Sheet header ──────────────────────────────────────────────────────── */
+#sheet-header {
+  flex-shrink: 0;
+  padding: 2px 16px 10px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+#header-title {
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.8px;
+  color: #111;
+  line-height: 1;
+}
+
+#header-sub {
+  font-size: 9.5px;
+  color: #aaa;
+  margin-top: 2px;
+  letter-spacing: 0.3px;
+}
+
+/* ── Search panel ──────────────────────────────────────────────────────── */
+#panel {
+  flex-shrink: 0;
+  padding: 12px 14px 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* ── Action Buttons ──────────────────────────────────────────────────────── */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+#add-detour-btn {
+  flex: 1;
+  padding: 13px;
+  background: #f7f7f7;
+  color: #111;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  transition: background 0.12s;
+}
+
+#add-detour-btn:active { 
+  background: #ececec; 
+}
+
+#go-btn {
+  flex: 1; /* Maintains dominance in the layout */
+}
+
+/* Field group card */
+.field-group {
+  background: #f7f7f7;
+  border: 1px solid #e8e8e8;
+  border-radius: 14px;
+  margin-bottom: 10px;
+  /* Do NOT use overflow:hidden — would clip suggestions dropdown */
+}
+
+/* Individual field row */
+.field-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px;
+}
+
+/* Badge circles */
+.field-badge {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0;
+}
+
+.badge-a {
+  background: #111;
+  color: #fff;
+}
+
+.badge-b {
+  background: #c0392b;
+  color: #fff;
+}
+
+/* Input field */
+.field-row input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 12px;
+  color: #111;
+  padding: 0;
+  outline: none;
+  line-height: 1.4;
+}
+
+.field-row input::placeholder {
+  color: #bbb;
+}
+
+/* Pin button */
+.pin-btn {
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 5px;
+  color: #bbb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: background 0.12s, color 0.12s;
+}
+
+.pin-btn:hover { background: #ececec; color: #555; }
+.pin-btn.active {
+  background: #111;
+  color: #fff;
+  border-radius: 6px;
+}
+
+/* Remove button */
+.remove-btn {
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 5px;
+  color: #bbb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: background 0.12s, color 0.12s;
+}
+
+/* Changed from red to neutral grey */
+.remove-btn:hover { background: #ececec; color: #555; }
+.remove-btn:active { background: #e0e0e0; }
+
+/* Dot divider between fields */
+.field-divider {
+  display: flex;
+  align-items: center;
+  padding: 0 12px 0 28px;
+  height: 14px;
+}
+
+.field-divider-dots {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.field-divider-dots span {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #ccc;
+  display: block;
+}
+
+/* Autocomplete suggestions */
+.suggestions {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1.5px solid #111;
+  border-radius: 10px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.14);
+  z-index: 9999;
+  max-height: 200px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.suggestions div {
+  padding: 10px 12px;
+  font-size: 11px;
+  color: #222;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+.suggestions div:last-child { border-bottom: none; }
+.suggestions div:active { background: #f4f4f4; }
+
+/* Find button */
+#go-btn {
+  width: 100%;
+  padding: 13px;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  transition: background 0.12s, transform 0.08s;
+}
+
+#go-btn:active { background: #333; transform: scale(0.99); }
+#go-btn:disabled { background: #ccc; cursor: default; transform: none; }
+
+/* ── Sheet body (scrollable results) ──────────────────────────────────── */
+#sheet-body {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* Status bar */
+#status-bar {
+  padding: 6px 16px;
+  font-size: 10px;
+  color: #aaa;
+  min-height: 24px;
+  letter-spacing: 0.2px;
+  border-bottom: 1px solid #f6f6f6;
+}
+
+/* Fare note */
+.fare-note {
+  padding: 6px 16px;
+  font-size: 10px;
+  color: #bbb;
+  letter-spacing: 0.2px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* ── Route cards ───────────────────────────────────────────────────────── */
+.route-option {
+  padding: 13px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: background 0.1s;
+}
+
+.route-option:active { background: #fafafa; }
+
+.route-option.selected {
+  background: #f8f8f8;
+  border-left: 3px solid #111;
+}
+
+.route-title {
+  font-weight: 700;
+  font-size: 12px;
+  color: #111;
+  margin-bottom: 6px;
+}
+
+.route-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 7px;
+  align-items: center;
+}
+
+.route-code-chip {
+  color: #fff;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.route-arrow {
+  font-size: 10px;
+  color: #bbb;
+}
+
+.route-steps {
+  font-size: 11px;
+  color: #666;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 4px;
+  line-height: 1.45;
+}
+
+.step-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #111;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.step-transfer .step-dot {
+  background: #fff;
+  border: 2px solid #aaa;
+}
+
+/* ── States: loading, no results, error ───────────────────────────────── */
+.no-results, .loading {
+  padding: 20px 16px;
+  font-size: 12px;
+  color: #888;
+  line-height: 1.6;
+}
+
+.error {
+  margin: 10px 16px;
+  padding: 10px 12px;
+  background: #fff3f3;
+  border: 1px solid #f5c0c0;
+  border-radius: 8px;
+  font-size: 11px;
+  color: #c00;
+}
+
+.fallback-card {
+  margin: 0 16px 8px;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 11px 12px;
+  cursor: pointer;
+  background: #fafafa;
+}
+
+.fallback-card:active { background: #f0f0f0; }
+
+/* ── Leaflet tooltip overrides ────────────────────────────────────────── */
+.leaflet-tooltip.route-tooltip {
+  background: #fff;
+  border: 1.5px solid #111;
+  border-radius: 6px;
+  padding: 5px 9px;
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 11px;
+  box-shadow: 2px 3px 10px rgba(0,0,0,0.18);
+  white-space: nowrap;
+  color: #111;
+}
+
+.leaflet-tooltip.route-tooltip::before { display: none; }
+
+.leaflet-tooltip.route-tooltip.walk {
+  border-color: #888;
+  color: #555;
+}
+
+/* ── Scrollbar styling ─────────────────────────────────────────────────── */
+#sheet-body::-webkit-scrollbar { width: 4px; }
+#sheet-body::-webkit-scrollbar-track { background: transparent; }
+#sheet-body::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 2px; }
+
+/* ── Manong AI Chathead ────────────────────────────────────────────────── */
+#manong-chat-container {
+  position: fixed;
+  bottom: 290px; 
+  right: 16px;
+  z-index: 100;
+  width: 52px;  /* Lock the container size to the chathead size */
+  height: 52px;
+  pointer-events: none;
+}
+
+/* Chathead Icon */
+#manong-chathead {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #fca311;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  cursor: grab;
+  pointer-events: auto;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2; /* Keep it layered above the chat window */
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#manong-chathead:active,
+#manong-chathead.is-dragging {
+  cursor: grabbing;
+  transform: scale(1.15) rotate(-8deg);
+}
+
+#manong-chathead img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+/* Chat Window */
+#manong-chat-window {
+  position: absolute; /* Hover relative to the container */
+  width: 280px;
+  height: 340px;
+  background: #fff;
+  border: 1.5px solid #111;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+  z-index: 1;
+  
+  /* Default positioning (Bottom Right) */
+  bottom: 64px; 
+  right: 0;
+  transform-origin: bottom right; 
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  overflow: hidden;
+}
+
+#manong-chat-window.hidden {
+  opacity: 0;
+  transform: scale(0.4) translateY(20px);
+  pointer-events: none;
+}
+
+/* KEEP YOUR EXISTING CSS FOR HEADER, BUBBLES, AND INPUT BELOW THIS */
+
+/* Chat Header */
+#manong-chat-header {
+  background: #111;
+  color: #fff;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.header-info { display: flex; flex-direction: column; }
+.chat-title { font-weight: 700; font-size: 13px; letter-spacing: -0.2px; }
+.chat-status { font-size: 9px; color: #06d6a0; letter-spacing: 0.5px; }
+
+#manong-close-btn {
+  background: transparent;
+  color: #fff;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px;
+  opacity: 0.7;
+}
+#manong-close-btn:hover { opacity: 1; }
+
+/* Chat Messages Area */
+#manong-chat-messages {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #fafafa;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chat-bubble {
+  max-width: 85%;
+  padding: 9px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+.ai-bubble { align-self: flex-start; background: #fff; border: 1px solid #ddd; border-bottom-left-radius: 4px; color: #111; }
+.user-bubble { align-self: flex-end; background: #111; color: #fff; border-bottom-right-radius: 4px; }
+
+/* Chat Input Area */
+#manong-chat-input-area {
+  display: flex;
+  padding: 10px;
+  background: #fff;
+  border-top: 1px solid #f0f0f0;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+#manong-chat-input {
+  flex: 1;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 11px;
+  outline: none;
+  background: #f7f7f7;
+}
+#manong-chat-input:focus { border-color: #111; background: #fff; }
+
+#manong-send-btn {
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+#manong-send-btn:active { background: #333; }
