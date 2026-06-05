@@ -2,89 +2,148 @@
 
 const COORDS = {
 
-  // ── Terminals / Major Hubs (Shifted to actual PUJ loading zones) ─────────
-  "Carbon":                          { lat: 10.29230, lng: 123.89920 }, // M.C. Briones / USJR side
-  "Colon":                           { lat: 10.29653, lng: 123.89868 }, // Colon & Osmeña Blvd intersection
-  "Fuente Osmeña":                   { lat: 10.31201, lng: 123.89308 }, // Osmeña Blvd waiting shed
-  "SM City Cebu":                    { lat: 10.31342, lng: 123.91845 }, // Main PUJ Terminal (North Wing)
-  "Ayala Center Cebu":               { lat: 10.31956, lng: 123.90566 }, // Ayala PUV Terminal (Luzon Ave)
-  "Parkmall":                        { lat: 10.32550, lng: 123.93480 }, // Parkmall PUJ Terminal
-  "IT Park":                         { lat: 10.33005, lng: 123.90487 }, // IT Park Transport Terminal
-  "South Bus Terminal":              { lat: 10.29844, lng: 123.89328 }, // N. Bacalso entrance
-  "North Bus Terminal":              { lat: 10.31480, lng: 123.91820 }, // NBT (Now located at SM City Cebu)
-  "Pier":                            { lat: 10.30335, lng: 123.91250 }, // Pier 1 entrance
-  "Alumnos":                         { lat: 10.28950, lng: 123.87700 }, // Alumnos street corner
-  "Cathedral":                       { lat: 10.29520, lng: 123.90230 }, // Manalili side
-  "City Hall":                       { lat: 10.29320, lng: 123.90150 }, // Magellan's Cross / City Hall Square
-  "Plaza Independencia":             { lat: 10.29275, lng: 123.90424}, // Plaza Independencia corner
+  // ── Terminals / Major Hubs ────────────────────────────────────────────────
+  "Carbon":                          { lat: 10.2914, lng: 123.8991 }, 
+  "Colon":                           { lat: 10.2950, lng: 123.9000 }, 
+  "Fuente Osmeña":                   { lat: 10.3113, lng: 123.8932 }, 
+  "SM City Cebu":                    { lat: 10.3111, lng: 123.9181 }, 
+  "Ayala Center Cebu":               { lat: 10.3182, lng: 123.9052 }, 
+  "Parkmall":                        { lat: 10.325564388162894, lng: 123.93439067903068 }, 
+  "IT Park":                         { lat: 10.3283, lng: 123.9059 }, 
+  "South Bus Terminal":              { lat: 10.2976, lng: 123.8935 }, 
+  "North Bus Terminal":              { lat: 10.3259, lng: 123.9324 }, 
+  "Pier":                            { lat: 10.2995, lng: 123.9125 }, 
+  "Alumnos":                         { lat: 10.2895, lng: 123.8770 }, 
+  "Cathedral":                       { lat: 10.2941, lng: 123.9022 }, 
+  "City Hall":                       { lat: 10.2928, lng: 123.9015 }, 
+  "Parkmall Terminal":               { lat: 10.324895978804696, lng: 123.93285978023043},
+  "SM Seaside MyBus Pick-Up Area (Mountain Wing)": { lat: 10.28167, lng: 123.87974 },
+  "SM City MyBus Terminal":          { lat: 10.3115229603173, lng: 123.92055940457668},
+  "Mango Jeep Terminal (Poblacion)": { lat: 10.24340, lng: 123.84785 },
+  "Gaisano Tabunok Terminal":        { lat: 10.26633, lng: 123.84214 },
+  "Bulacao Bus Stop":                { lat: 10.27236, lng: 123.84816},
+  "IT Park Terminal":                { lat: 10.33174, lng: 123.90658},
+
+
+  // Informal Stops / Transits
+  "Urgello Transit":                 { lat: 10.304620139128968, lng: 123.89237840342106 },
+  "ACT Transit":                     { lat: 10.299085373333384, lng: 123.89418257410108 }, 
+  "SWU PHINMA Transit":              { lat: 10.302745172534161, lng: 123.89292808225255 },
+  "Metro Colon Transit":             { lat: 10.295998673836484, lng: 123.89787999876309 },
+  "Parkmall Transit (Mantawi)":      { lat: 10.325217946665092, lng: 123.93247980907029 },
+  "Gen. Maxilom Ave. Transit":       { lat: 10.307824629840743, lng: 123.90844532091126},
+  "F. Cabahug Transit":              { lat: 10.313580772647533, lng: 123.92074706898629},
+  "M. Logarta Transit":              { lat: 10.320301004842003, lng: 123.92611677569852},
+  "E.O. Perez Transit":              { lat: 10.320481796011835, lng: 123.9284633585913},
+  "Ouano Ave. Transit":              { lat: 10.324397775123186, lng: 123.93564270841924},
+  "City Times Square Transit (Mantawi)": { lat: 10.32602, lng: 123.93353},
+  "Albaño Transit":                  { lat: 10.31977, lng: 123.92585},
+  "G. Gaisano Transit":              { lat: 10.304868, lng: 123.909106},
+  "B. Benedicto Transit":            { lat: 10.301983, lng: 123.908909},
+  "T. Padilla Transit":              { lat: 10.30185, lng: 123.90650},
+  "Legazpi Transit":                 { lat: 10.296344789768245, lng: 123.89999900324503},
+  "Leon Kilat Transit":              { lat: 10.29749, lng: 123.89645 },
+  "Robinsons Galleria Transit (Sr. Osmeña)": { lat: 10.30327, lng: 123.91243},
+  "Radisson Blu Transit":            { lat: 10.30914, lng: 123.91965},
+  "San Isidro Transit":              { lat: 10.24915, lng: 123.83912},
+  "Shopwise Transit":                { lat: 10.28967, lng: 123.87058},
+  "Katipunan Transit":               { lat: 10.29952, lng: 123.87876},
+  "Paseo Arcenas Transit":           { lat: 10.30931, lng: 123.87607},
+  "Capitol Square Transit":          { lat: 10.31728, lng: 123.89423},
+  "Sacred Heart - Capitol Transit":  { lat: 10.31778, lng: 123.89656},
+  "Gorordo Ave. Transit":            { lat: 10.31940, lng: 123.89960},
+  "UP Cebu Transit":                 { lat: 10.32248, lng: 123.89881},
+  "Sudlon Transit":                  { lat: 10.32910, lng: 123.89751},
+  "Kaohsiung St. Transit":           { lat: 10.31087, lng: 123.92159},
+
 
   // ── Modern Mega-Developments ──────────────────────────────────────────────
-  "SM Seaside City Cebu":            { lat: 10.28114, lng: 123.88050 }, // Mountain Wing Transport Hub
-  "Cebu Ocean Park":                 { lat: 10.28040, lng: 123.88210 }, // Entrance driveway
-  "NUSTAR Resort & Casino":          { lat: 10.27400, lng: 123.88560 }, // Main gate / SRP Road
-  "Il Corso Lifemalls":              { lat: 10.26675, lng: 123.87749 }, // SRP highway drop-off
+  "SM Seaside City Cebu (Mountain Wing)":            { lat: 10.28187, lng: 123.87976 }, 
+  "Cebu Ocean Park":                 { lat: 10.2804, lng: 123.8821 }, 
+  "NUSTAR Resort & Casino":          { lat: 10.2740, lng: 123.8856 }, 
+  "Il Corso Lifemalls":              { lat: 10.2682, lng: 123.8741 }, 
 
   // ── Barangays & Highway Anchors (Corrected to OSM Highway Nodes) ──────────
-  "Tisa":                            { lat: 10.30150, lng: 123.87050 }, // Katipunan St
-  "Punta Princesa":                  { lat: 10.29453, lng: 123.87006 }, // Lourdes Parish intersection
-  "Basak San Nicolas":               { lat: 10.28930, lng: 123.86820 }, // N. Bacalso Highway
-  "Labangon":                        { lat: 10.30320, lng: 123.87900 }, // Tres de Abril / Katipunan
-  "Labangon Market":                 { lat: 10.29879, lng: 123.88216 }, // Market road front
-  "Mambaling":                       { lat: 10.29200, lng: 123.88150 }, // N. Bacalso
-  "Mambaling Flyover":               { lat: 10.29116, lng: 123.87729 }, // Flyover bottom
-  "Guadalupe":                       { lat: 10.31250, lng: 123.87820 }, // Guadalupe Church / V. Rama
-  "Banawa":                          { lat: 10.31420, lng: 123.88200 }, // Duterte St / Banawa
-  "Urgello":                         { lat: 10.30150, lng: 123.89050 }, // Aznar Rd / Urgello St
-  "Mabolo":                          { lat: 10.32040, lng: 123.91720 }, // Mabolo Church (F. Cabahug)
-  "Lahug (Jy Square)":               { lat: 10.33441, lng: 123.89895 }, // Gorordo / Salinas intersection
-  "Apas":                            { lat: 10.33950, lng: 123.90680 }, // Camp Lapu-Lapu Rd
-  "Busay":                           { lat: 10.36210, lng: 123.88890 }, // Cebu Transcentral Hwy
-  "Pit-os":                          { lat: 10.37050, lng: 123.92100 }, // Pit-os Terminal
-  "Talamban":                        { lat: 10.36650, lng: 123.91500 }, // Talamban Gym / Intersection
-  "Mandaue":                         { lat: 10.34460, lng: 123.94240 }, // Mandaue City Hall / Highway
-  "Bulacao":                         { lat: 10.27324, lng: 123.84898 }, // Bulacao-Pardo boundary
-  "Tabunok":                         { lat: 10.26633, lng: 123.84204 }, // Tabunok Flyover underpass
-  "Poblacion Talisay":               { lat: 10.24510, lng: 123.85100 }, // Talisay City Hall
-  "Inayawan":                        { lat: 10.27450, lng: 123.86950 }, // Inayawan Public Market
-  "Pardo":                           { lat: 10.28250, lng: 123.85800 }, // Pardo Church front
-  "Quiot / Basak San Nicolas":       { lat: 10.28750, lng: 123.85710 }, // Quiot corner
-  "Talisay City":                    { lat: 10.25200, lng: 123.83900 }, // Tabunok Highway
-  "Minglanilla":                     { lat: 10.24420, lng: 123.79750 }, // Minglanilla Highway
-  "Plaza Housing":                   { lat: 10.34180, lng: 123.88800 }, // Transcentral corner
-  "Lapu-Lapu City (Opon)":           { lat: 10.31480, lng: 123.94910 }, // Opon Mercado terminal
+  "Tisa":                            { lat: 10.3015, lng: 123.8705 }, 
+  "Punta Princesa":                  { lat: 10.2975, lng: 123.8690 }, 
+  "Basak San Nicolas":               { lat: 10.2885, lng: 123.8682 }, 
+  "Labangon":                        { lat: 10.3032, lng: 123.8790 }, 
+  "Labangon Market":                 { lat: 10.2999, lng: 123.8752 }, 
+  "Mambaling":                       { lat: 10.2920, lng: 123.8815 }, 
+  "Mambaling Flyover":               { lat: 10.2933, lng: 123.8770 },
+  "Guadalupe":                       { lat: 10.3125, lng: 123.8782 }, 
+  "Banawa":                          { lat: 10.3142, lng: 123.8820 },  
+  "Mabolo":                          { lat: 10.3226, lng: 123.9142 }, 
+  "Lahug (Jy Square)":               { lat: 10.3382, lng: 123.8995 }, 
+  "Apas":                            { lat: 10.3425, lng: 123.9070 }, 
+  "Busay":                           { lat: 10.3621, lng: 123.8889 }, 
+  "Pit-os":                          { lat: 10.3705, lng: 123.9210 }, 
+  "Talamban":                        { lat: 10.3642, lng: 123.9160 }, 
+  "Mandaue":                         { lat: 10.3446, lng: 123.9424 }, 
+  "Bulacao":                         { lat: 10.2730, lng: 123.8480 }, 
+  "Tabunok":                         { lat: 10.2428, lng: 123.8477 },
+  "Poblacion Talisay":               { lat: 10.2451, lng: 123.8510 },
+  "Inayawan":                        { lat: 10.2745, lng: 123.8695 }, 
+  "Pardo":                           { lat: 10.2825, lng: 123.8580 },
+  "Quiot / Basak San Nicolas":       { lat: 10.2850, lng: 123.8640 }, 
+  "Talisay City":                    { lat: 10.2520, lng: 123.8390 }, 
+  "Minglanilla":                     { lat: 10.2442, lng: 123.7975 }, 
+  "Plaza Housing":                   { lat: 10.3418, lng: 123.8880 }, 
+  "Lapu-Lapu City (Opon)":           { lat: 10.3148, lng: 123.9491 }, 
 
   // ── Roads / Intersections ─────────────────────────────────────────────────
-  "V. Rama Ave":                     { lat: 10.30820, lng: 123.88900 }, // V. Rama mid-section
-  "Gorordo Ave":                     { lat: 10.32240, lng: 123.89850 }, // Gorordo / Escario intersection
-  "Capitol":                         { lat: 10.31580, lng: 123.89080 }, // Escario / Osmeña intersection
-  "Mango Square / Escario":          { lat: 10.31750, lng: 123.89250 }, // Mango Ave (Gen Maxilom)
-  "Salinas Drive":                   { lat: 10.33400, lng: 123.90120 }, // Salinas fronting IT Park
-  "N. Bacalso Ave":                  { lat: 10.30600, lng: 123.88600 }, // N. Bacalso mid-section
+  "V. Rama Ave":                     { lat: 10.3082, lng: 123.8890 }, 
+  "Gorordo Ave":                     { lat: 10.3224, lng: 123.8985 }, 
+  "Capitol":                         { lat: 10.3164, lng: 123.8907 }, 
+  "Mango Square / Escario":          { lat: 10.3175, lng: 123.8925 }, 
+  "Salinas Drive":                   { lat: 10.3340, lng: 123.9012 }, 
+  "N. Bacalso Ave":                  { lat: 10.3060, lng: 123.8860 },
 
-  // ── Malls / Markets ───────────────────────────────────────────────────────
-  "Robinsons Place":                 { lat: 10.31050, lng: 123.89350 }, // Osmeña Blvd entrance
-  "Robinsons Galleria Cebu":         { lat: 10.31140, lng: 123.90900 }, // Maxilom Ave Extension
-  "Taboan Market":                   { lat: 10.29550, lng: 123.89110 }, // T. Abella St
-  "Gaisano Country Mall":            { lat: 10.33920, lng: 123.91810 }, // Gov. Cuenco Ave drop-off
-  "Banilad Town Centre (BTC)":       { lat: 10.34215, lng: 123.91585 }, // Gov. Cuenco Ave drop-off
-  "Gaisano Grand Jai-Alai":          { lat: 10.28910, lng: 123.88210 }, // N. Bacalso entrance
-  "Escario Central Mall":            { lat: 10.31880, lng: 123.88990 }, // N. Escario St
-  "Elizabeth Mall (E-Mall)":         { lat: 10.29850, lng: 123.89550 }, // Sanciangko St / Leon Kilat
+  // ── Malls / Markets / Parks ───────────────────────────────────────────────────────
+  "Robinsons Place":                 { lat: 10.3105, lng: 123.8935 }, 
+  "Robinsons Galleria Cebu":         { lat: 10.3114, lng: 123.9090 }, 
+  "Taboan Market":                   { lat: 10.2955, lng: 123.8911 }, 
+  "Gaisano Country Mall":            { lat: 10.3392, lng: 123.9181 }, 
+  "Banilad Town Centre (BTC)":       { lat: 10.3421, lng: 123.9158 }, 
+  "Gaisano Grand Jai-Alai":          { lat: 10.2891, lng: 123.8821 }, 
+  "Escario Central Mall":            { lat: 10.3188, lng: 123.8899 }, 
+  "Elizabeth Mall (E-Mall)":         { lat: 10.2985, lng: 123.8955 }, 
+  "E-Mall (Leon Kilat Entrance)":    { lat: 10.298018210807708, lng: 123.89572715951475},
+  "Colonnade Mall":                  { lat: 10.297004967226213, lng: 123.89967999256339},
+  "SM City Cebu (Xiamen Entrance)":  { lat: 10.312839856990548, lng: 123.91693657127854},
+  "SM Hypermarket":                  { lat: 10.31512841542575, lng: 123.92379220235848},
+  "Metro Colon":                     { lat: 10.296239375731377, lng: 123.89827527075332},
+  "GMall of Cebu":                   { lat: 10.309118357617605, lng: 123.91236856831263},
 
   // ── Schools ───────────────────────────────────────────────────────────────
-  "USC Main":                        { lat: 10.29950, lng: 123.89800 }, // P. Del Rosario entrance
-  "USC South Campus":                { lat: 10.30150, lng: 123.88330 }, // J. Alcantara St gate
-  "USC North Campus":                { lat: 10.31680, lng: 123.89430 }, // Gen. Maxilom Ave gate
-  "USC Talamban Campus (TC)":        { lat: 10.35400, lng: 123.91300 }, // Main Gate Gov. Cuenco
-  "UP Cebu":                         { lat: 10.32280, lng: 123.89880 }, // Gorordo Ave entrance
-  "SWU Basak Campus":                { lat: 10.28490, lng: 123.86920 }, // SWU Basak Gate
-  "CITU":                            { lat: 10.29400, lng: 123.88120 }, // N. Bacalso Highway entrance
-  "University of Cebu (UC)":         { lat: 10.29290, lng: 123.90020 }, // Sanciangko Gate
+  "USC Main":                        { lat: 10.3001, lng: 123.8985 }, 
+  "USC South Campus":                { lat: 10.3015, lng: 123.8833 }, 
+  "USC North Campus":                { lat: 10.3168, lng: 123.8943 }, 
+  "USC Talamban Campus (TC)":        { lat: 10.3524, lng: 123.9135 }, 
+  "UP Cebu":                         { lat: 10.3228, lng: 123.8988 }, 
+  "SWU Basak Campus":                { lat: 10.2849, lng: 123.8692 }, 
+  "CITU":                            { lat: 10.2941, lng: 123.8813 }, 
+  "University of Cebu (UC)":         { lat: 10.2929, lng: 123.9002 }, 
+  "UC-Main (Leon Kilat Entrance)":   { lat: 10.296360966112394, lng: 123.8961966724131 },
+  "UV-Main (Colon Entrance)":        { lat: 10.297850573009372, lng: 123.90150939362003 },
+  "Cebu Doctors University (CDU)":   { lat: 10.320182334385455, lng: 123.93286472136448},
+  "Cebu City Science High School":   { lat: 10.30030, lng: 123.87867},
 
   // ── Hospitals & Hotels ────────────────────────────────────────────────────
-  "Cebu Doctors University Hospital": { lat: 10.31210, lng: 123.89180 }, // Osmeña Blvd drop-off
-  "Vicente Sotto Hosp.":             { lat: 10.31170, lng: 123.88900 }, // B. Rodriguez St entrance
-  "Cebu City Medical Center":        { lat: 10.29910, lng: 123.89220 }, // N. Bacalso entrance
-  "Miller Hospital":                 { lat: 10.29950, lng: 123.87250 }, // Tres de Abril entrance
-  "Mactan Airport (MCIA)":           { lat: 10.30850, lng: 123.98030 }  // T1 / T2 loop
+  "Sacred Heart Hospital":           { lat: 10.304043237303324, lng: 123.892604494767},
+  "Cebu Doctors University Hospital": { lat: 10.3121, lng: 123.8918 }, 
+  "Vicente Sotto Hosp.":             { lat: 10.3117, lng: 123.8890 }, 
+  "Cebu City Medical Center":        { lat: 10.2991, lng: 123.8922 }, 
+  "Miller Hospital":                 { lat: 10.2995, lng: 123.8725 }, 
+  "Mactan Airport (MCIA)":           { lat: 10.3085, lng: 123.9803 },
+  "Chong Hua Hospital Mandaue":      { lat: 10.322997623553967, lng: 123.93121055641726},
+  
+  // Funeral Homes
+  "Queen City Memorial Garden":      { lat: 10.30931, lng: 123.91233},
+
+  // Government / Historic Sites
+  "Museo Sugbo":                     { lat: 10.303764625571029, lng: 123.90633622172703},
+  "Maritima Ruins":                  { lat: 10.291409887312414, lng: 123.9022784926386},
+  "Plaza Independencia":             { lat: 10.29406, lng: 123.90484},
+  "Tisa Barangay Hall":              { lat: 10.30110, lng: 123.86963}
 };
