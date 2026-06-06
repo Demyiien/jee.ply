@@ -375,6 +375,13 @@ async function renderResults(routes) {
   }
 }
 
+
+// Renumber detour badges 1, 2, 3… after any add/remove
+function refreshDetourBadges() {
+  document.querySelectorAll('.detour-badge').forEach((badge, i) => {
+    badge.textContent = i + 1;
+  });
+}
 // ─── ADD DETOUR BUTTON ────────────────────────────────────────────────────
 document.getElementById('add-detour-btn').addEventListener('click', () => {
   const idx = state.detours.length;
@@ -384,7 +391,7 @@ document.getElementById('add-detour-btn').addEventListener('click', () => {
   const row = document.createElement('div');
   row.className = 'field-row card-beige';
   row.innerHTML = `
-    <div class="field-badge badge-detour">D</div>
+    <div class="field-badge badge-detour detour-badge">${idx + 1}</div>
     <input type="text" id="detour-input-${idx}" placeholder="Add a detour…" autocomplete="off" />
     <button class="remove-btn" id="remove-detour-btn-${idx}">✕</button>
     <button class="pin-btn" id="pin-detour-btn-${idx}" title="Pin detour on map">
@@ -405,6 +412,7 @@ document.getElementById('add-detour-btn').addEventListener('click', () => {
   });
 
   // 1. Setup Autocomplete
+  refreshDetourBadges();
   setupAutocomplete(`detour-input-${idx}`, `detour-suggestions-${idx}`, (r) => {
     state.detours[idx] = r;
     
@@ -427,6 +435,7 @@ document.getElementById('add-detour-btn').addEventListener('click', () => {
     
     // Remove UI elements
     group.removeChild(row);
+    refreshDetourBadges(); // Renumber remaining detour badges
     setStatus('Detour removed.');
 
     setTimeout(() => setSheetState('mid'), 10);
@@ -661,7 +670,7 @@ function renderBuilderSegment() {
     });
 
     bResults.innerHTML = html;
-    setTimeout(() => setSheetState('full'));
+    setTimeout(() => setSheetState('full'), 10);
   }, 100);
 }
 
@@ -899,7 +908,7 @@ document.getElementById('builder-back-btn').addEventListener('click', () => {
 });
 
 // ─── AUTOCOMPLETE ─────────────────────────────────────────────────────────
-function setupAutocomplete(inputId, sugId, onSelect) {
+function setupAutocomplete(inputId, sugId, onSelect, showDist = true) {
   const input = document.getElementById(inputId);
   const sug   = document.getElementById(sugId);
   let timer;
@@ -928,7 +937,7 @@ function setupAutocomplete(inputId, sugId, onSelect) {
     localMatches = localMatches.slice(0, 4);
 
     let html = localMatches.map(r =>
-      `<div data-lat="${r.lat}" data-lng="${r.lng}" data-name="${r.name}"> <b>${r.name}</b> <span style="color:#888;font-size:10px;margin-left:6px">~${r.dist.toFixed(1)}km</span></div>`
+      `<div data-lat="${r.lat}" data-lng="${r.lng}" data-name="${r.name}"> <b>${r.name}</b>${showDist ? ` <span style="color:#888;font-size:10px;margin-left:6px">~${r.dist.toFixed(1)}km</span>` : ''}</div>`
     ).join('');
 
     if (html) {
@@ -1128,7 +1137,7 @@ map.on('click', async (e) => {
 // ─── AUTOCOMPLETE HOOKS ───────────────────────────────────────────────────
 setupAutocomplete('origin-input', 'origin-suggestions', (r) => {
   state.origin = r; placeOriginMarker(r); map.setView([r.lat, r.lng], 14); setStatus(`Origin: ${r.name}`);
-});
+}, false);
 setupAutocomplete('dest-input', 'dest-suggestions', (r) => {
   state.dest = r; placeDestMarker(r); map.setView([r.lat, r.lng], 14); setStatus(`Destination: ${r.name}`);
 });
