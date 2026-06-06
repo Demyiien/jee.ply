@@ -113,7 +113,7 @@ async function buildRouteLayers(route, isSelected) {
         await drawWalk(
           [state.origin.lat, state.origin.lng],
           [roadCoords[0][0], roadCoords[0][1]],
-          `🚶 Walk ~${mins} min`
+          `<img src="./assets/walkman.svg" style="width: 12px; vertical-align: -2px; margin-right: 4px;"> Walk ~${mins} min`
         );
       }
     }
@@ -156,9 +156,11 @@ async function buildRouteLayers(route, isSelected) {
     // Board marker (colored chip with route code)
     const boardIcon = L.divIcon({
       html: `<div style="background:${leg.color};color:#fff;font-size:10px;padding:2px 6px;
-             border-radius:4px;white-space:nowrap;font-family:'Space Mono',monospace;
+             border-radius:4px;white-space:nowrap;font-family:'Work Sans',sans-serif;
              font-weight:700;border:1px solid rgba(0,0,0,0.2);
-             opacity:${o};box-shadow:0 1px 4px rgba(0,0,0,0.2)">${leg.code}</div>`,
+             opacity:${o};box-shadow:0 1px 4px rgba(0,0,0,0.2);
+             display:inline-flex;align-items:center;justify-content:center;
+             text-align:center">${leg.code}</div>`,
       className: '', iconAnchor: [0, 8]
     });
     const boardMarker = L.marker([leg.stops[0].lat, leg.stops[0].lng], { icon: boardIcon }).addTo(map);
@@ -192,7 +194,7 @@ async function buildRouteLayers(route, isSelected) {
     await drawWalk(
       [lastStop.lat,  lastStop.lng],
       [state.dest.lat, state.dest.lng],
-      `🚶 Walk ~${mins} min`
+      `<img src="./assets/walkman.svg" style="width: 12px; vertical-align: -2px; margin-right: 4px;"> Walk ~${mins} min`
     );
   }
 
@@ -296,25 +298,28 @@ async function renderResults(routes) {
         }
       }
 
-      // Inject badges and the distance text into the route title area
+      // Inject badges and info pills into the route card
       return `<div class="route-option${i === 0 ? ' selected' : ''}" data-idx="${i}">
         <div class="route-title" style="display:flex; align-items:center; flex-wrap:wrap; gap:4px; margin-bottom:8px;">
           ${badgesHtml}
-          <span>${tag} · ₱${r.fare} · ${timeStr} · ${distStr}</span>
+          <span class="route-tag-pill">${tag}</span>
+        </div>
+        <div class="route-info-pills">
+          <span class="route-pill pill-time">⏱ ${timeStr}</span>
+          <span class="route-pill pill-fare">₱${r.fare}</span>
+          <span class="route-pill pill-dist">📍 ${distStr}</span>
         </div>
         <div class="route-meta">
           ${r.legs.map((l, li) => `
-            ${li > 0 ? '<span class="route-arrow">→</span>' : ''}
+            ${li > 0 ? '<img src="./assets/arrow-right.svg" class="route-arrow" style="width: 12px; margin: 0 4px; opacity: 0.6;" alt="to">' : ''}
             <span class="route-code-chip" style="background:${l.color}">${l.code}</span>
           `).join('')}
         </div>
         <div class="route-steps">
-          
           <div class="step">
             <div class="step-dot"></div>
             <span>Walk ${Math.round(r.walkToFirst * 1000)}m → board at <b>${r.legs[0].boardAt}</b></span>
           </div>
-          
           ${r.legs.map((leg, li) => `
             ${li > 0 ? `
               <div class="step">
@@ -324,14 +329,13 @@ async function renderResults(routes) {
             ` : ''}
             <div class="step">
               <div class="step-dot" style="background:${leg.color}"></div>
-              <span>[${leg.code}] alight at <b>${leg.alightAt}</b> · ${leg.dist.toFixed(1)}km · ₱${calcFare(leg.dist)}</span>
+              <img src="./assets/jeepney.svg" style="width: 14px; vertical-align: -3px; margin-right: 4px;"> [${leg.code}] alight at <b>${leg.alightAt}</b> · ${leg.dist.toFixed(1)}km · ₱${calcFare(leg.dist)}</span>
             </div>
             ${li < r.legs.length - 1
               ? `<div class="step step-transfer"><div class="step-dot"></div>
                  <span>Walk ~${Math.round((r.xferWalk || 0) * 1000)}m to next stop</span></div>`
               : ''}
           `).join('')}
-          
           <div class="step">
             <div class="step-dot" style="background:#c0392b"></div>
             <span>Walk ${Math.round(r.walkFromLast * 1000)}m to destination</span>
@@ -351,7 +355,9 @@ async function renderResults(routes) {
     });
   });
 
-  setSheetState('full');
+  if (!window.isStartingTrip) {
+    setSheetState('full');
+  }
   clearMapRoutes();
   
   for (let i = 0; i < routes.length; i++) routeLayerGroups.push(null);
@@ -373,50 +379,44 @@ async function renderResults(routes) {
 document.getElementById('add-detour-btn').addEventListener('click', () => {
   const idx = state.detours.length;
   state.detours.push(null);
-  detourMarkers.push(null); // Initialize marker slot
+  detourMarkers.push(null); 
 
   const row = document.createElement('div');
-  row.className = 'field-row';
+  row.className = 'field-row card-beige';
   row.innerHTML = `
-    <div class="field-badge" style="background:#fca311;color:#111">+</div>
+    <div class="field-badge badge-detour">D</div>
     <input type="text" id="detour-input-${idx}" placeholder="Add a detour…" autocomplete="off" />
-    
-    <button class="remove-btn" id="remove-detour-btn-${idx}" title="Remove detour">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    <button class="remove-btn" id="remove-detour-btn-${idx}">✕</button>
+    <button class="pin-btn" id="pin-detour-btn-${idx}" title="Pin detour on map">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
     </button>
-    
-    <button class="pin-btn" id="pin-detour-btn-${idx}" title="Pin on map">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-    </button>
-    
     <div class="suggestions" id="detour-suggestions-${idx}" style="display:none"></div>
   `;
-
-  const divider = document.createElement('div');
-  divider.className = 'field-divider';
-  divider.innerHTML = '<div class="field-divider-dots"><span></span><span></span><span></span></div>';
 
   const group = document.getElementById('waypoints-group');
   const destRow = document.getElementById('dest-row');
   group.insertBefore(row, destRow);
-  group.insertBefore(divider, destRow);
+  
+  setTimeout(() => setSheetState('mid'), 10);
 
+  // Wire pin button for this detour
+  document.getElementById(`pin-detour-btn-${idx}`).addEventListener('click', () => {
+    setPinMode(pinMode === `detour-${idx}` ? null : `detour-${idx}`);
+  });
+
+  // 1. Setup Autocomplete
   setupAutocomplete(`detour-input-${idx}`, `detour-suggestions-${idx}`, (r) => {
     state.detours[idx] = r;
     
     if (detourMarkers[idx]) map.removeLayer(detourMarkers[idx]); // Clear previous marker if overwritten
-    detourMarkers[idx] = L.circleMarker([r.lat, r.lng], { color: '#fff', fillColor: '#fca311', fillOpacity: 1, radius: 8, weight: 2 })
+    detourMarkers[idx] = L.circleMarker([r.lat, r.lng], { color: '#fff', fillColor: '#3D3F4A', fillOpacity: 1, radius: 8, weight: 2 })
       .bindPopup('🔸 Detour: ' + r.name).addTo(map);
       
     map.setView([r.lat, r.lng], 14);
     setStatus(`Detour added: ${r.name}`);
   });
 
-  document.getElementById(`pin-detour-btn-${idx}`).addEventListener('click', () => {
-    setPinMode(`detour-${idx}`);
-  });
-
-  // NEW: Remove Detour Listener
+  // 2. Setup Remove Button
   document.getElementById(`remove-detour-btn-${idx}`).addEventListener('click', () => {
     state.detours[idx] = null; // Nullify state safely so indices don't break
     
@@ -427,9 +427,475 @@ document.getElementById('add-detour-btn').addEventListener('click', () => {
     
     // Remove UI elements
     group.removeChild(row);
-    group.removeChild(divider);
     setStatus('Detour removed.');
+
+    setTimeout(() => setSheetState('mid'), 10);
   });
+});
+
+// --- NEW TRIP BUILDER LOGIC ---
+let builderState = { waypoints: [], segmentIdx: 0, selectedRoutes: [] };
+
+let errorTimer;
+function showErrorBubble(msg) {
+  let bubble = document.getElementById('error-bubble');
+  
+  if (!bubble) {
+    bubble = document.createElement('div');
+    bubble.id = 'error-bubble';
+    document.getElementById('panel').prepend(bubble);
+  }
+  
+  bubble.textContent = msg;
+  bubble.classList.add('show');
+  
+  clearTimeout(errorTimer);
+  errorTimer = setTimeout(() => {
+    bubble.classList.remove('show');
+  }, 3000);
+}
+
+document.getElementById('go-btn').addEventListener('click', () => {
+  // 1. Safety Check: If a user manually erased the text, ensure the state is marked as null
+  if (document.getElementById('origin-input').value.trim() === '') state.origin = null;
+  if (document.getElementById('dest-input').value.trim() === '') state.dest = null;
+  
+  for (let i = 0; i < state.detours.length; i++) {
+    const inputEl = document.getElementById(`detour-input-${i}`);
+    if (inputEl && inputEl.value.trim() === '') {
+      state.detours[i] = null; 
+    }
+  }
+
+  // 2. Validate Start and End Locations
+  if (!state.origin && !state.dest) {
+    showErrorBubble('Please input a start and end location.');
+    return; // Stops the code here
+  } else if (!state.origin) {
+    showErrorBubble('Please input a start location.');
+    return; // Stops the code here
+  } else if (!state.dest) {
+    showErrorBubble('Please input a destination.');
+    return; // Stops the code here
+  }
+
+  // 3. Validate Detours
+  let hasEmptyDetour = false;
+  for (let i = 0; i < state.detours.length; i++) {
+    const inputEl = document.getElementById(`detour-input-${i}`);
+    // If the input exists on screen but its state is null, it's empty
+    if (inputEl && state.detours[i] === null) {
+      hasEmptyDetour = true;
+      break;
+    }
+  }
+
+  if (hasEmptyDetour) {
+    showErrorBubble('Please input a location for your detour.');
+    return; // Stops the code here
+  }
+
+  // 4. Everything is valid, proceed with building the trip
+  const validDetours = (state.detours || []).filter(d => d !== null);
+
+  builderState.waypoints = [state.origin, ...validDetours, state.dest];
+  builderState.segmentIdx = 0;
+  builderState.selectedRoutes = [];
+
+  // Clear old map routes
+  document.getElementById('results').innerHTML = '';
+  clearMapRoutes();
+
+  // UI Transition
+  document.getElementById('panel').classList.add('hidden');
+  document.getElementById('sheet-body').classList.add('hidden');
+  document.getElementById('builder-panel').classList.remove('hidden');
+  document.getElementById('summary-footer').classList.remove('hidden');
+  document.getElementById('summary-itinerary').innerHTML = '';
+  updateBuilderSummaryStats();
+
+  renderBuilderSegment();
+
+  setTimeout(() => setSheetState('full'), 10);
+});
+
+// ─── LIVE SUMMARY STATS DURING BUILDER ───────────────────────────────────
+function updateBuilderSummaryStats() {
+  const totalSegments = builderState.waypoints.length - 1;
+  const selected = builderState.selectedRoutes;
+  const allDone = selected.length === totalSegments;
+
+  let totalFare = 0, totalMins = 0, totalDist = 0, totalLegs = 0;
+  selected.forEach(r => {
+    totalFare += r.fare;
+    totalMins += r.travelTime;
+    totalDist += r.totalDist;
+    if (r.legs) totalLegs += r.legs.length;
+  });
+
+  if (selected.length === 0) {
+    document.getElementById('sum-trips').textContent = '—';
+    document.getElementById('sum-time').textContent  = '—';
+    document.getElementById('sum-dist').textContent  = '—';
+    document.getElementById('sum-fare').textContent  = '—';
+  } else {
+    document.getElementById('sum-trips').textContent = `${totalLegs} trip${totalLegs !== 1 ? 's' : ''}`;
+    document.getElementById('sum-time').textContent  = `${totalMins} mins`;
+    document.getElementById('sum-dist').textContent  = `${totalDist.toFixed(2)} km`;
+    document.getElementById('sum-fare').textContent  = `₱${totalFare.toFixed(2)}`;
+  }
+
+  const startBtn = document.getElementById('start-trip-btn');
+  startBtn.disabled = !allDone;
+}
+
+function renderBuilderSegment() {
+  const bHeader = document.getElementById('builder-header');
+  const bResults = document.getElementById('builder-results');
+  
+  bHeader.innerHTML = ''; 
+  bResults.innerHTML = '<div class="loading">Finding best options...</div>';
+
+  setTimeout(() => {
+    let html = '';
+    
+    const startLoc = builderState.waypoints[builderState.segmentIdx];
+    const endLoc = builderState.waypoints[builderState.segmentIdx + 1];
+    const segmentRoutes = findRoutes(startLoc.lat, startLoc.lng, endLoc.lat, endLoc.lng);
+
+    const generateCard = (route, isRecommended, idx) => {
+      const isWalk = route.isWalkOnly || (route.legs.length === 1 && route.legs[0].code === 'WALK');
+      
+      const chipsOrWalk = isWalk
+        ? `<div style="display:flex;align-items:center;gap:6px;color:#888;font-size:12px;">
+             <img src="./assets/walkman.svg" style="width:14px; opacity:0.6;" alt="walk"> Walk to destination (no jeepney available)
+           </div>`
+        : `<div style="display:flex; flex-wrap:wrap; gap:4px; align-items:center;">
+            ${route.legs.map(l => `<span class="route-code-chip" style="background:${l.color}">${l.code}</span>`).join('<img src="./assets/arrow-right.svg" style="width:12px; margin:0 2px; opacity:0.6;" alt="to">')}
+           </div>`;
+           
+           return `
+           <div class="route-card" onclick="selectRouteForSegment(${idx})">
+             ${isRecommended ? `<div class="route-card-header"><span>${isWalk ? 'Walk Route' : 'Recommended Route • by Manong AI'}</span></div>` : ''}
+             
+             <div class="route-card-main">
+              <span class="route-loc">${startLoc.name.split(',')[0]}</span>
+              <div style="display:flex; justify-content:center;">
+                <img src="./assets/arrow-right.svg" alt="to">
+              </div>
+              <span class="route-loc-dest">${endLoc.name.split(',')[0]}</span>
+              <span class="route-fare">${isWalk ? 'Free' : '₱' + route.fare.toFixed(2)}</span>
+            </div>
+     
+             <div class="route-meta" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+               <div style="font-size:12px; color:#666;">${route.totalDist.toFixed(1)} km • ${route.travelTime} min.</div>
+               ${chipsOrWalk}
+             </div>
+           </div>
+         `;};
+
+    // 1. PIN THE RECOMMENDED ROUTE TO THE VERY TOP
+    let alternatives = [];
+    if (segmentRoutes.length === 0) {
+      html += `<div class="error" style="margin-bottom:8px;">No routes found between these points.</div>`;
+    } else {
+      const recommended = segmentRoutes[0];
+      alternatives = segmentRoutes.slice(1);
+      
+      html += generateCard(recommended, true, 0);
+      if (alternatives.length > 0) {
+        html += `<div class="builder-divider" style="margin: 12px 0;">--- or build your own trip ---</div>`;
+      }
+    }
+
+    // 2. RENDER THE TIMELINE (Beige Cards & Alternatives)
+    builderState.waypoints.forEach((wp, i) => {
+      
+      let badge = 'D';
+      let badgeClass = 'badge-detour';
+      if (i === 0) { badge = 'S'; badgeClass = 'badge-start'; }
+      else if (i === builderState.waypoints.length - 1) { badge = 'E'; badgeClass = 'badge-start'; }
+
+      const beigeCard = `
+        <div class="card-beige" style="margin-bottom:8px; padding:10px 12px; pointer-events:none;">
+          <div style="display:flex; align-items:center; gap:10px;">
+             <div class="field-badge ${badgeClass}">${badge}</div>
+             <span style="font-weight:700; font-size:12px;">${wp.name.split(',')[0]}</span>
+          </div>
+        </div>
+      `;
+
+      if (i < builderState.segmentIdx) {
+        // PAST: Beige Card -> Selected Route
+        html += beigeCard;
+        const r = builderState.selectedRoutes[i];
+        html += `
+          <div class="route-card" style="border-color: var(--blue); background: #f8f9fa; cursor: default;">
+            
+            <div class="route-card-main" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+              <span style="font-size:12px; color:var(--blue); font-weight:700;">Selected Route</span>
+              <span class="route-fare">P${r.fare.toFixed(2)}</span>
+            </div>
+
+            <div class="route-meta" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+              <div style="font-size:12px; color:#666;">${r.totalDist.toFixed(1)} km • ${r.travelTime} min.</div>
+              <div style="display:flex; flex-wrap:wrap; gap:4px; align-items:center;">
+                ${r.legs.map(l => `<span class="route-code-chip" style="background:${l.color}">${l.code}</span>`).join('<img src="./assets/arrow-right.svg" style="width:12px; margin:0 2px; opacity:0.6;" alt="to">')}
+              </div>
+            </div>
+
+          </div>
+        `;
+      }
+      else if (i === builderState.segmentIdx) {
+        // CURRENT: Beige Card -> Alternative Options
+        html += beigeCard;
+        alternatives.forEach((alt, altIdx) => {
+          html += generateCard(alt, false, altIdx + 1);
+        });
+      } 
+      else {
+        // FUTURE: Just the Beige Card
+        html += beigeCard;
+      }
+    });
+
+    bResults.innerHTML = html;
+    setTimeout(() => setSheetState('full'));
+  }, 100);
+}
+
+// Global exposure for the onclick handler
+window.selectRouteForSegment = function(routeIdx) {
+  const startLoc = builderState.waypoints[builderState.segmentIdx];
+  const endLoc = builderState.waypoints[builderState.segmentIdx + 1];
+  const selectedRoute = findRoutes(startLoc.lat, startLoc.lng, endLoc.lat, endLoc.lng)[routeIdx];
+  
+  builderState.selectedRoutes.push(selectedRoute);
+  builderState.segmentIdx++;
+  updateBuilderSummaryStats();
+
+  if (builderState.segmentIdx < builderState.waypoints.length - 1) {
+    renderBuilderSegment();
+  } else {
+    showTripSummary();
+  }
+
+  setTimeout(() => setSheetState('mid'),10);
+};
+
+function showTripSummary() {
+  // builder-panel and summary-footer are already visible; just hide the route cards
+  document.getElementById('builder-panel').classList.add('hidden');
+
+  let totalFare = 0, totalMins = 0, totalDist = 0, totalLegs = 0;
+  builderState.selectedRoutes.forEach(r => {
+    totalFare += r.fare;
+    totalMins += r.travelTime;
+    totalDist += r.totalDist;
+    if (r.legs) totalLegs += r.legs.length;
+  });
+
+  document.getElementById('sum-trips').textContent = `${totalLegs} trip${totalLegs !== 1 ? 's' : ''}`;
+  document.getElementById('sum-time').textContent  = `${totalMins} mins`;
+  document.getElementById('sum-dist').textContent  = `${totalDist.toFixed(2)} km`;
+  document.getElementById('sum-fare').textContent  = `₱${totalFare.toFixed(2)}`;
+
+  // ── Build itinerary: S/1/2…/E nodes + per-leg cards ───────────────────
+  const waypoints = builderState.waypoints;      // [origin, ...detours, dest]
+  const routes    = builderState.selectedRoutes; // one route object per segment
+
+  let html = '';
+
+  waypoints.forEach((wp, wpIdx) => {
+    // ── Waypoint header card ──────────────────────────────────────────────
+    let badgeLabel, badgeCls;
+    if (wpIdx === 0) {
+      badgeLabel = 'S'; badgeCls = 'itin-badge badge-s';
+    } else if (wpIdx === waypoints.length - 1) {
+      badgeLabel = 'E'; badgeCls = 'itin-badge badge-e';
+    } else {
+      badgeLabel = String(wpIdx); badgeCls = 'itin-badge badge-d';
+    }
+
+    html += `
+      <div class="itin-wp-card">
+        <div class="${badgeCls}">${badgeLabel}</div>
+        <span class="itin-wp-name">${wp.name.split(',')[0]}</span>
+      </div>`;
+
+    // ── Leg cards for this segment ────────────────────────────────────────
+    if (wpIdx < routes.length) {
+      const seg = routes[wpIdx];
+
+      seg.legs.forEach((leg, legIdx) => {
+        // ── WALK-ONLY leg (no jeepney available) ──────────────────────────
+        if (seg.isWalkOnly || leg.code === 'WALK') {
+          const wDist = leg.dist.toFixed(2);
+          const wMins = Math.ceil(leg.dist * 12);
+          const nextWp = waypoints[wpIdx + 1];
+          const isFar = seg.noTransit || leg.dist > 0.5;
+          html += `
+            <div class="itin-leg-card itin-walk-card${isFar ? ' itin-walk-warning' : ''}">
+              <div class="itin-leg-header">
+                <span class="itin-leg-from">${wp.name.split(',')[0]}</span>
+                <img src="./assets/walkman.svg" class="itin-walk-icon" style="width: 18px; height: 18px;" alt="Walk">
+                <span class="itin-leg-to">${nextWp ? nextWp.name.split(',')[0] : 'Destination'}</span>
+                <span class="itin-leg-fare">--</span>
+              </div>
+              <div class="itin-leg-meta">${wDist} km · ${wMins} min.${isFar ? ' · ⚠️ No jeepney — find a nearby stop' : ''}</div>
+            </div>`;
+          return;
+        }
+
+        // Walk card before first leg (if meaningful)
+        if (legIdx === 0 && seg.walkToFirst > 0.05) {
+          const walkDist = (seg.walkToFirst).toFixed(1);
+          const walkMins = Math.ceil(seg.walkToFirst * 12);
+          html += `
+            <div class="itin-leg-card itin-walk-card">
+              <div class="itin-leg-header">
+                <span class="itin-leg-from">${wp.name.split(',')[0]}</span>
+                <img src="./assets/walkman.svg" class="itin-walk-icon" style="width: 18px; height: 18px;" alt="Walk">
+                <span class="itin-leg-to">${leg.boardAt.split(',')[0]}</span>
+                <span class="itin-leg-fare">--</span>
+              </div>
+              <div class="itin-leg-meta">${walkDist} km · ${walkMins} min.</div>
+            </div>`;
+        }
+
+        // Transfer walk between legs
+        if (legIdx > 0 && seg.xferWalk > 0.05) {
+          const prevLeg = seg.legs[legIdx - 1];
+          const xDist = (seg.xferWalk).toFixed(1);
+          const xMins = Math.ceil(seg.xferWalk * 12);
+          html += `
+            <div class="itin-leg-card itin-walk-card">
+              <div class="itin-leg-header">
+                <span class="itin-leg-from">${prevLeg.alightAt.split(',')[0]}</span>
+                <img src="./assets/walkman.svg" class="itin-walk-icon" style="width: 18px; height: 18px;" alt="Walk">
+                <span class="itin-leg-to">${leg.boardAt.split(',')[0]}</span>
+                <span class="itin-leg-fare">--</span>
+              </div>
+              <div class="itin-leg-meta">${xDist} km · ${xMins} min.</div>
+            </div>`;
+        }
+
+        // Jeepney ride card
+        const rideTime = Math.ceil((leg.dist / 20) * 60);
+        const chipsHTML = `<span class="route-code-chip" style="background:${leg.color}">${leg.code}</span>`;
+        const svgArrow = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
+        html += `
+          <div class="itin-leg-card">
+            <div class="itin-leg-header">
+              <span class="itin-leg-from">${leg.boardAt.split(',')[0]}</span>
+              <span class="itin-ride-icon"><img src="./assets/arrow-right.svg" alt="to"></span>
+              <span class="itin-leg-to">${leg.alightAt.split(',')[0]}</span>
+              <span class="itin-leg-fare">₱${calcFare(leg.dist).toFixed(2)}</span>
+            </div>
+            <div class="itin-leg-meta">${leg.dist.toFixed(1)} km · ${rideTime} min.</div>
+            <div class="itin-leg-chips">${chipsHTML}</div>
+          </div>`;
+      });
+
+      // Walk after last leg (to next waypoint)
+      if (seg.walkFromLast > 0.05) {
+        const lastLeg  = seg.legs[seg.legs.length - 1];
+        const nextWp   = waypoints[wpIdx + 1];
+        const wDist    = (seg.walkFromLast).toFixed(1);
+        const wMins    = Math.ceil(seg.walkFromLast * 12);
+        html += `
+          <div class="itin-leg-card itin-walk-card">
+            <div class="itin-leg-header">
+              <span class="itin-leg-from">${lastLeg.alightAt.split(',')[0]}</span>
+              <img src="./assets/walkman.svg" class="itin-walk-icon" style="width: 18px; height: 18px;" alt="Walk">
+              <span class="itin-leg-to">${nextWp.name.split(',')[0]}</span>
+              <span class="itin-leg-fare">--</span>
+            </div>
+            <div class="itin-leg-meta">${wDist} km · ${wMins} min.</div>
+          </div>`;
+      }
+    }
+  });
+
+  document.getElementById('summary-itinerary').innerHTML = html;
+  setStatus('Trip assembled. Ready to start.');
+}
+
+// Start Trip (Maps the final stitched route)
+document.getElementById('start-trip-btn').addEventListener('click', async () => {
+  window.isStartingTrip = true;
+
+  // ── Snapshot the itinerary HTML before hiding summary-footer ─────────────
+  const itinerarySnapshot = document.getElementById('summary-itinerary').innerHTML;
+
+  // ── Show loading overlay, hide everything else ────────────────────────────
+  document.getElementById('summary-footer').classList.add('hidden');
+  document.getElementById('panel').classList.add('hidden');
+  document.getElementById('sheet-body').classList.add('hidden');
+  document.getElementById('loading-overlay').classList.remove('hidden');
+  setSheetState('mid');
+
+  // ── Build the stitched trip object ────────────────────────────────────────
+  let stitchedLegs = [];
+  builderState.selectedRoutes.forEach(r => stitchedLegs = stitchedLegs.concat(r.legs));
+
+  const finalTrip = {
+    type: "stitched",
+    legs: stitchedLegs,
+    walkToFirst: builderState.selectedRoutes[0].walkToFirst,
+    walkFromLast: builderState.selectedRoutes[builderState.selectedRoutes.length - 1].walkFromLast,
+    xferWalk: 0.25,
+    travelTime: parseInt(document.getElementById('sum-time').textContent),
+    fare: parseFloat(document.getElementById('sum-fare').textContent.replace('₱', ''))
+  };
+
+  // ── Plot the route on the map (this is the slow async part) ──────────────
+  await renderResults([finalTrip]);
+
+  // ── Hide loading, reveal active-trip panel with itinerary ─────────────────
+  document.getElementById('loading-overlay').classList.add('hidden');
+  document.getElementById('active-trip-itinerary').innerHTML = itinerarySnapshot;
+  document.getElementById('active-sum-trips').textContent = document.getElementById('sum-trips').textContent;
+  document.getElementById('active-sum-time').textContent  = document.getElementById('sum-time').textContent;
+  document.getElementById('active-sum-dist').textContent  = document.getElementById('sum-dist').textContent;
+  document.getElementById('active-trip-panel').classList.remove('hidden');
+  document.getElementById('go-btn').style.display = 'none';
+  document.getElementById('add-detour-btn').style.display = 'none';
+
+  // Wait one frame so the browser paints the panel before we measure offsetHeight
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      setSheetState('mid');
+    });
+  });
+  window.isStartingTrip = false;
+});
+
+// Back Button in Summary
+// Back Button — smart multi-level back
+document.getElementById('builder-back-btn').addEventListener('click', () => {
+  const allDone = builderState.selectedRoutes.length === builderState.waypoints.length - 1;
+
+  if (builderState.segmentIdx > 0 || allDone) {
+    // Undo the last route selection and re-show that segment
+    builderState.selectedRoutes.pop();
+    builderState.segmentIdx--;
+    updateBuilderSummaryStats();
+    document.getElementById('summary-itinerary').innerHTML = '';
+    document.getElementById('builder-panel').classList.remove('hidden');
+    renderBuilderSegment();
+    setTimeout(() => setSheetState('full'), 10);
+  } else {
+    // First segment, nothing selected — back to location input
+    document.getElementById('builder-panel').classList.add('hidden');
+    document.getElementById('summary-footer').classList.add('hidden');
+    document.getElementById('panel').classList.remove('hidden');
+    document.getElementById('sheet-body').classList.remove('hidden');
+    builderState.selectedRoutes = [];
+    builderState.segmentIdx = 0;
+    setTimeout(() => setSheetState('mid'), 10);
+  }
 });
 
 // ─── AUTOCOMPLETE ─────────────────────────────────────────────────────────
@@ -547,15 +1013,81 @@ document.getElementById('pin-origin-btn').addEventListener('click', () => setPin
 document.getElementById('pin-dest-btn').addEventListener('click', () => setPinMode(pinMode === 'dest' ? null : 'dest'));
 document.getElementById('pin-cancel-btn').addEventListener('click', () => setPinMode(null));
 
+// ─── GPS / CURRENT LOCATION ───────────────────────────────────────────────
+const gpsBtn = document.getElementById('gps-origin-btn');
+
+async function applyCurrentLocation() {
+  gpsBtn.classList.add('active');
+  gpsBtn.style.pointerEvents = 'none';
+
+  const onSuccess = async (pos) => {
+    const { latitude: lat, longitude: lng } = pos.coords;
+    let name = 'Current Location';
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`,
+        { headers: { 'User-Agent': 'Jeeply/1.0' } }
+      );
+      const data = await res.json();
+      if (data.display_name) name = data.display_name.split(',').slice(0, 2).join(',').trim();
+    } catch {}
+
+    const loc = { name, lat, lng };
+    state.origin = loc;
+    document.getElementById('origin-input').value = name;
+    placeOriginMarker(loc);
+    map.setView([lat, lng], 16);
+    setStatus(`Origin set: ${name}`);
+    gpsBtn.classList.remove('active');
+    gpsBtn.style.pointerEvents = '';
+  };
+
+  const onError = (err) => {
+    gpsBtn.classList.remove('active');
+    gpsBtn.style.pointerEvents = '';
+    if (err.code === err.PERMISSION_DENIED) {
+      showErrorBubble('Location access denied. Enable it in your browser settings.');
+    } else {
+      showErrorBubble('Could not get your location. Try again.');
+    }
+  };
+
+  navigator.geolocation.getCurrentPosition(onSuccess, onError, {
+    enableHighAccuracy: true,
+    timeout: 10000
+  });
+}
+
+gpsBtn.addEventListener('click', async () => {
+  if (!navigator.geolocation) {
+    showErrorBubble('Geolocation is not supported by your browser.');
+    return;
+  }
+
+  // Check if we already know the permission state
+  if (navigator.permissions) {
+    const perm = await navigator.permissions.query({ name: 'geolocation' });
+    if (perm.state === 'granted') {
+      // Permission already granted — use location directly, no prompt
+      applyCurrentLocation();
+    } else if (perm.state === 'denied') {
+      showErrorBubble('Location access is blocked. Enable it in your browser settings.');
+    } else {
+      // 'prompt' state — browser will ask the user once; nothing extra needed
+      applyCurrentLocation();
+    }
+  } else {
+    // Fallback for browsers without Permissions API — just request directly
+    applyCurrentLocation();
+  }
+});
+
 // ─── MAP CLICK ────────────────────────────────────────────────────────────
 map.on('click', async (e) => {
   const { lat, lng } = e.latlng;
 
-  L.popup().setLatLng([lat, lng])
-    .setContent(`<div style="text-align:center;font-family:'Space Mono',monospace;font-size:11px">
-      <b>📍 Coordinates</b><br>${lat.toFixed(5)}, ${lng.toFixed(5)}</div>`)
-    .openOn(map);
-  navigator.clipboard.writeText(`{ lat: ${lat.toFixed(5)}, lng: ${lng.toFixed(5)} }`).catch(() => {});
+  // Only act if we're in a pin mode — no coordinates popup
+  if (!pinMode) return;
 
   let name = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
   try {
@@ -584,26 +1116,12 @@ map.on('click', async (e) => {
     const idx = parseInt(pinMode.split('-')[1]);
     state.detours[idx] = loc;
     document.getElementById(`detour-input-${idx}`).value = name;
-    
-    if (detourMarkers[idx]) map.removeLayer(detourMarkers[idx]); // Clear previous
-    detourMarkers[idx] = L.circleMarker([lat, lng], { color: '#fff', fillColor: '#fca311', fillOpacity: 1, radius: 8, weight: 2 })
+    if (detourMarkers[idx]) map.removeLayer(detourMarkers[idx]);
+    detourMarkers[idx] = L.circleMarker([lat, lng], { color: '#fff', fillColor: '#3D3F4A', fillOpacity: 1, radius: 8, weight: 2 })
       .bindPopup('🔸 Detour: ' + name).addTo(map);
-      
     setStatus(`Detour added: ${name}`);
     setPinMode(null);
     map.setView([lat, lng], 15);
-  } else {
-    if (!state.origin) {
-      state.origin = loc;
-      document.getElementById('origin-input').value = name;
-      placeOriginMarker(loc);
-      setStatus('Origin set. Now set your destination.');
-    } else if (!state.dest) {
-      state.dest = loc;
-      document.getElementById('dest-input').value = name;
-      placeDestMarker(loc);
-      setStatus('Destination set. Tap "Route Trip".');
-    }
   }
 });
 
@@ -615,90 +1133,28 @@ setupAutocomplete('dest-input', 'dest-suggestions', (r) => {
   state.dest = r; placeDestMarker(r); map.setView([r.lat, r.lng], 14); setStatus(`Destination: ${r.name}`);
 });
 
-// ─── SEARCH BUTTON (MULTI-STOP STITCHING) ─────────────────────────────────
-document.getElementById('go-btn').addEventListener('click', async () => {
-  const validDetours = (state.detours || []).filter(d => d !== null);
+// ─── CHATHEAD & SHEET SYNC ────────────────────────────────────────────────
+window.chatRelativeOffset = -84; // Base distance to hover above the sheet
+
+function syncChatheadToSheet(futureTranslateY, instant = false) {
+  const container = document.getElementById('manong-chat-container');
+  if (!container) return; 
+
+  // Calculate where the top of the sheet is going to be
+  const sheetBaseTop = window.innerHeight - sheet.offsetHeight;
+  const futureSheetTop = sheetBaseTop + futureTranslateY;
   
-  if (!state.origin || !state.dest) {
-    setStatus('Set both origin and destination first.');
-    setSheetState('mid'); 
-    return;
-  }
+  // Calculate target top based on our saved draggable offset
+  let targetTop = futureSheetTop + window.chatRelativeOffset;
+  
+  // Strict boundaries: don't go off the top of the screen, and don't overlap the sheet
+  const maxTop = futureSheetTop - 52 - 16; 
+  let finalTop = Math.max(16, Math.min(maxTop, targetTop));
 
-  const btn = document.getElementById('go-btn');
-  btn.disabled = true; 
-  btn.textContent = 'Routing Trip…';
-  setStatus('Calculating route…');
-  document.getElementById('results').innerHTML = '<div class="loading">Finding the best paths…</div>';
-  clearMapRoutes();
-
-  try {
-    if (validDetours.length === 0) {
-      const routes = findRoutes(state.origin.lat, state.origin.lng, state.dest.lat, state.dest.lng);
-      if (routes.length > 0) {
-        await renderResults(routes);
-      } else {
-        setStatus('No nearby routes found.');
-        const suggestions = LANDMARKS.map(lm => ({ ...lm, dist: haversine(state.origin.lat, state.origin.lng, lm.lat, lm.lng) })).sort((a, b) => a.dist - b.dist).slice(0, 3);
-        document.getElementById('results').innerHTML = `
-          <div class="no-results" style="padding-bottom:8px">
-            <b style="color:#c0392b">No routes within walking distance.</b><br>
-            <span style="color:#888">Try heading to one of these nearby hubs:</span>
-          </div>
-          ${suggestions.map(s => `
-            <div class="fallback-card" data-lat="${s.lat}" data-lng="${s.lng}">
-              <div style="font-weight:700;font-size:12px">📍 ${s.name}</div>
-              <div style="font-size:10px;color:#888;margin-top:2px">~${(s.dist * 1000).toFixed(0)}m away</div>
-            </div>
-          `).join('')}`;
-        document.querySelectorAll('.fallback-card').forEach(c => c.addEventListener('click', () => map.setView([parseFloat(c.dataset.lat), parseFloat(c.dataset.lng)], 16)));
-        setSheetState('full');
-      }
-    } else {
-      const waypoints = [state.origin, ...validDetours, state.dest];
-      let combinedLegs = [], totalTravelTime = 0, totalFare = 0, totalWalkToFirst = 0, totalWalkFromLast = 0, totalXferWalk = 0;
-
-      for (let i = 0; i < waypoints.length - 1; i++) {
-        const start = waypoints[i], end = waypoints[i + 1];
-        const segmentRoutes = findRoutes(start.lat, start.lng, end.lat, end.lng);
-        if (segmentRoutes.length === 0) throw new Error(`No nearby jeepney routes found between ${start.name} and ${end.name}.`);
-        
-        const bestSeg = segmentRoutes[0]; 
-        if (i === 0) totalWalkToFirst = bestSeg.walkToFirst;
-        if (i === waypoints.length - 2) totalWalkFromLast = bestSeg.walkFromLast;
-
-        if (i > 0) {
-          const prevStop = combinedLegs[combinedLegs.length - 1].stops.slice(-1)[0];
-          const nextStop = bestSeg.legs[0].stops[0];
-          totalXferWalk += haversine(prevStop.lat, prevStop.lng, start.lat, start.lng) + haversine(start.lat, start.lng, nextStop.lat, nextStop.lng);
-        }
-        if (bestSeg.xferWalk) totalXferWalk += bestSeg.xferWalk;
-
-        combinedLegs = combinedLegs.concat(bestSeg.legs);
-        totalTravelTime += bestSeg.travelTime;
-        totalFare += bestSeg.fare;
-      }
-
-      await renderResults([{
-        type: "stitched",
-        legs: combinedLegs,
-        walkToFirst: totalWalkToFirst,
-        walkFromLast: totalWalkFromLast,
-        xferWalk: totalXferWalk > 0 ? (totalXferWalk / (combinedLegs.length - 1)) : 0.25,
-        travelTime: totalTravelTime,
-        fare: totalFare,
-        transfers: combinedLegs.length - 1
-      }]);
-    }
-  } catch (err) {
-    setStatus('Error: ' + err.message);
-    document.getElementById('results').innerHTML = `<div class="error">${err.message}</div>`;
-    setSheetState('full');
-  }
-
-  btn.disabled = false; 
-  btn.textContent = 'Route Trip';
-});
+  // Mirror the sheet's animation timing
+  container.style.transition = instant ? 'none' : 'top 0.36s cubic-bezier(0.4,0,0.2,1)';
+  container.style.top = `${finalTop}px`;
+}
 
 // ─── BOTTOM SHEET ─────────────────────────────────────────────────────────
 const sheet = document.getElementById('bottom-sheet');
@@ -708,16 +1164,49 @@ let sheetState = 'mid';
 
 function getSnapY(state) {
   const h = sheet.offsetHeight;
-  if (state === 'peek') return h - 68;
-  if (state === 'mid')  return h - 268; // shows handle+header+inputs
-  return 0;                              // full
+  if (state === 'peek') {
+    const handleH = document.getElementById('sheet-handle-area').offsetHeight || 48;
+    return h - handleH;
+  }
+  if (state === 'mid') {
+    const handleH = document.getElementById('sheet-handle-area').offsetHeight || 48;
+    let activePanelH = 190;
+
+    const builderVisible = !document.getElementById('builder-panel').classList.contains('hidden');
+    const summaryVisible = !document.getElementById('summary-footer').classList.contains('hidden');
+
+    if (builderVisible && summaryVisible) {
+      // Builder mode: #builder-panel scrolls internally, so only measure the
+      // pinned summary footer — that way the stats + Back/Start buttons are
+      // always fully visible at mid state without needing to drag the sheet up.
+      activePanelH = document.getElementById('summary-footer').offsetHeight;
+    } else if (!document.getElementById('panel').classList.contains('hidden')) {
+      activePanelH = document.getElementById('panel').offsetHeight;
+    } else if (summaryVisible) {
+      activePanelH = document.getElementById('summary-footer').offsetHeight;
+    } else if (!document.getElementById('active-trip-panel').classList.contains('hidden')) {
+      activePanelH = document.getElementById('active-trip-panel').offsetHeight;
+    } else if (!document.getElementById('loading-overlay').classList.contains('hidden')) {
+      activePanelH = document.getElementById('loading-overlay').offsetHeight;
+    }
+
+    return Math.max(0, h - (handleH + activePanelH));
+  }
+  return 0; // full
 }
 
 function setSheetState(state, instant = false) {
   sheetState = state;
   const y = getSnapY(state);
+  
+  syncChatheadToSheet(y, instant);
+
   sheet.style.transition = instant ? 'none' : 'transform 0.36s cubic-bezier(0.4,0,0.2,1)';
   sheet.style.transform = `translateY(${y}px)`;
+
+  // Show "slide up" hint only at peek
+  const hint = document.getElementById('sheet-peek-hint');
+  if (hint) hint.classList.toggle('visible', state === 'peek');
 }
 
 // Touch drag
@@ -738,7 +1227,9 @@ handleArea.addEventListener('touchmove', e => {
   if (touchStartY === null) return;
   const delta = e.touches[0].clientY - touchStartY;
   const h = sheet.offsetHeight;
-  const clamped = Math.max(0, Math.min(touchStartTranslateY + delta, h - 68));
+  const handleH = document.getElementById('sheet-handle-area').offsetHeight || 48;
+  const clamped = Math.max(0, Math.min(touchStartTranslateY + delta, h - handleH));
+
   sheet.style.transform = `translateY(${clamped}px)`;
 }, { passive: true });
 
@@ -749,7 +1240,7 @@ handleArea.addEventListener('touchend', e => {
   const currentY = getCurrentTranslateY();
 
   const peekY = h - 68;
-  const midY  = h - 268;
+  const midY  = getSnapY('mid');
   const fullY = 0;
 
   let target;
@@ -783,271 +1274,56 @@ window.addEventListener('resize', () => setSheetState(sheetState, true));
 // ─── INIT ─────────────────────────────────────────────────────────────────
 // Set initial sheet position after layout is ready
 setTimeout(() => setSheetState('mid', true), 0);
-setStatus('Type a location or tap the map');
 
+// ─── END TRIP LOGIC ───────────────────────────────────────────────────────
+function endTrip() {
+  // 1. Reset Core State
+  state.origin = null;
+  state.dest = null;
+  state.routes = [];
+  state.selectedRouteIdx = 0;
+  builderState.selectedRoutes = [];
+  builderState.waypoints = [];
 
-// ─── MANONG AI CHATHEAD LOGIC ─────────────────────────────────────────────
-const chatContainer = document.getElementById('manong-chat-container');
-const chathead = document.getElementById('manong-chathead');
-const chatWindow = document.getElementById('manong-chat-window');
-const closeChatBtn = document.getElementById('manong-close-btn');
-const chatInput = document.getElementById('manong-chat-input');
-const sendBtn = document.getElementById('manong-send-btn');
-const messagesArea = document.getElementById('manong-chat-messages');
+  // 2. Clear Input Fields
+  document.getElementById('origin-input').value = '';
+  document.getElementById('dest-input').value = '';
 
-let isDraggingChathead = false;
-let hasMoved = false;
-let startX, startY, initialLeft, initialTop;
+  // 3. Remove Map Markers
+  if (originMarker) { map.removeLayer(originMarker); originMarker = null; }
+  if (destMarker) { map.removeLayer(destMarker); destMarker = null; }
 
-// Drag Start
-function onDragStart(e) {
-  const touch = e.type.includes('touch') ? e.touches[0] : e;
-  startX = touch.clientX;
-  startY = touch.clientY;
-  
-  // Grab absolute pixel coordinates
-  const rect = chatContainer.getBoundingClientRect();
-  initialLeft = rect.left;
-  initialTop = rect.top;
-  
-  isDraggingChathead = true;
-  hasMoved = false;
-
-  // Add class for bubbly animation
-  chathead.classList.add('is-dragging'); 
-
-  document.addEventListener('mousemove', onDragMove, { passive: false });
-  document.addEventListener('touchmove', onDragMove, { passive: false });
-  document.addEventListener('mouseup', onDragEnd);
-  document.addEventListener('touchend', onDragEnd);
-}
-
-// Drag Move (WITH SCREEN & BOTTOM SHEET BOUNDARY FIX)
-function onDragMove(e) {
-  if (!isDraggingChathead) return;
-  const touch = e.type.includes('touch') ? e.touches[0] : e;
-  const dx = touch.clientX - startX;
-  const dy = touch.clientY - startY;
-
-  if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
-    hasMoved = true;
-  }
-
-  if (hasMoved) {
-    e.preventDefault(); 
-    
-    // ─── ADD THIS FIX HERE ───────────────────────────────────
-    // If the chat window is currently open, close it instantly on drag
-    if (!chatWindow.classList.contains('hidden')) {
-      chatWindow.classList.add('hidden');
+  // 4. Safely Clear Detours
+  state.detours.forEach((d, idx) => {
+    if (d !== null) {
+      const removeBtn = document.getElementById(`remove-detour-btn-${idx}`);
+      if (removeBtn) removeBtn.click();
     }
-    // ─────────────────────────────────────────────────────────
-    
-    let newLeft = initialLeft + dx;
-    let newTop = initialTop + dy;
-
-    // ─── STRICT BOUNDARY MATH ───
-    const maxLeft = window.innerWidth - 52 - 16; 
-    
-    // Dynamically get the top of the bottom sheet so Manong doesn't overlap it
-    const sheetTop = document.getElementById('bottom-sheet').getBoundingClientRect().top;
-    
-    // The max height he can go is the top of the sheet, minus his size, minus 16px padding
-    const maxTop = sheetTop - 52 - 16;
-
-    // Force the coordinates to stay between 16px and the max dimensions
-    newLeft = Math.max(16, Math.min(maxLeft, newLeft));
-    newTop = Math.max(16, Math.min(maxTop, newTop));
-    // ────────────────────────────
-
-    chatContainer.style.right = 'auto'; 
-    chatContainer.style.bottom = 'auto'; 
-    chatContainer.style.left = `${newLeft}px`;
-    chatContainer.style.top = `${newTop}px`;
-  }
-}
-
-// Click to Open (WITH 4-QUADRANT ALIGNMENT FIX)
-chathead.addEventListener('click', () => {
-  if (!hasMoved) {
-    const rect = chatContainer.getBoundingClientRect();
-    const screenMidX = window.innerWidth / 2;
-    const screenMidY = window.innerHeight / 2;
-    
-    // 1. Reset absolute positioning properties
-    chatWindow.style.top = 'auto';
-    chatWindow.style.bottom = 'auto';
-    chatWindow.style.left = 'auto';
-    chatWindow.style.right = 'auto';
-
-    // 2. Vertical Alignment (Top Half vs Bottom Half)
-    if (rect.top < screenMidY) {
-      chatWindow.style.top = '64px'; // Sprout downwards
-      chatWindow.style.transformOrigin = rect.left < screenMidX ? 'top left' : 'top right';
-    } else {
-      chatWindow.style.bottom = '64px'; // Sprout upwards
-      chatWindow.style.transformOrigin = rect.left < screenMidX ? 'bottom left' : 'bottom right';
-    }
-
-    // 3. Horizontal Alignment (Left Half vs Right Half)
-    if (rect.left < screenMidX) {
-      chatWindow.style.left = '0'; // Align left edges
-    } else {
-      chatWindow.style.right = '0'; // Align right edges
-    }
-
-    // Toggle visibility
-    chatWindow.classList.toggle('hidden');
-    if (!chatWindow.classList.contains('hidden')) {
-      chatInput.focus();
-    }
-  }
-});
-
-// Drag End
-function onDragEnd() {
-  isDraggingChathead = false;
-  chathead.classList.remove('is-dragging');
-
-  document.removeEventListener('mousemove', onDragMove);
-  document.removeEventListener('touchmove', onDragMove);
-  document.removeEventListener('mouseup', onDragEnd);
-  document.removeEventListener('touchend', onDragEnd);
-}
-
-chathead.addEventListener('mousedown', onDragStart);
-chathead.addEventListener('touchstart', onDragStart, { passive: false });
-
-// Close Chat Window
-closeChatBtn.addEventListener('click', () => {
-  chatWindow.classList.add('hidden');
-});
-
-// ─── OPENROUTER API CHAT LOGIC ────────────────────────────────────────
-
-const API_KEY = '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'; // Replace with OpenRouter Key
-let chatHistory = [];
-
-function appendMessage(text, senderType) {
-  const bubble = document.createElement('div');
-  bubble.innerHTML = text.replace(/\n/g, '<br>');
-  bubble.className = `chat-bubble ${senderType}-bubble`;
-  messagesArea.appendChild(bubble);
-  messagesArea.scrollTop = messagesArea.scrollHeight; 
-  return bubble;
-}
-
-async function handleSendMessage() {
-  const text = chatInput.value.trim();
-  if (!text) return;
-
-  // 1. Display User Message
-  appendMessage(text, 'user');
-  chatInput.value = '';
-
-  // 2. Save User Message to History (Updated for OpenRouter/OpenAI format)
-  chatHistory.push({
-    role: "user",
-    content: text
   });
+  state.detours = [];
+  detourMarkers = [];
 
-  // 3. Show Loading State
-  const loadingBubble = appendMessage("Manong is typing...", 'ai loading-bubble');
+  // 5. Clear Polylines and Results UI
+  clearMapRoutes();
+  document.getElementById('results').innerHTML = '';
+  document.getElementById('active-trip-itinerary').innerHTML = '';
+  setStatus('Trip ended. Type a location or tap the map.');
 
-  try {
-    // 4. Fetch response from OpenRouter API
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${API_KEY}`,
-        'Content-Type': 'application/json',
-        // Optional but recommended by OpenRouter for routing
-        'HTTP-Referer': window.location.href, 
-        'X-Title': 'Jee.ply Manong AI' 
-      },
-      body: JSON.stringify({
-        model: "gpt-oss-120b", // You can change this to any OpenRouter model
-        messages: [
-          {
-            role: "system",
-            content:
-            `
-            You are Manong, a helpful local transit assistant for Cebu and the Central Visayas.
+  // 6. Reset UI Panels & Buttons
+  document.getElementById('sheet-body').classList.add('hidden');
+  document.getElementById('builder-panel').classList.add('hidden');
+  document.getElementById('summary-footer').classList.add('hidden');
+  document.getElementById('loading-overlay').classList.add('hidden');
+  document.getElementById('active-trip-panel').classList.add('hidden');
+  document.getElementById('panel').classList.remove('hidden');
 
-            # PERSONA & TONE
-            - Speak in a friendly mix of English and conversational Bisaya (e.g., "Icopy boss", "Trapik gamay").
-            - Be concise, practical, and accurate. Keep responses to 1–3 short sentences.
-            - Give the answer first, then any optional note.
-            - If the question is unrelated to the commute, reply with introducing why the question is unrelated followed by "I'm here to help with transportation routes and fares in Cebu. Ask me about your trip!"
-            - Avoid greetings, introductions, action asterisks (like *smiles*), markdown bolding (**), and unnecessary filler.
+  document.getElementById('go-btn').style.display = '';
+  document.getElementById('add-detour-btn').style.display = '';
 
-            # ROUTING RULES (CRITICAL)
-            1. CURRENT ROUTE OVERRIDE: If data exists under "CURRENT ROUTE RESULTS", you MUST use those exact paths, fares, and travel times. Do not invent outside options.
-            2. MANUAL ROUTING: If "CURRENT ROUTE RESULTS" says none are calculated, DO NOT tell the user to click buttons. Manually trace the connection between the user's Origin and Destination using the "AVAILABLE ROUTES" JSON data. 
-            3. SELECTION PRIORITY: Always recommend exactly ONE route. Prioritize the route with the least number of transfers, then shortest time, then lowest fare. Do not explain your selection criteria; just provide the route and the total.
-
-            # MANUAL FARE CALCULATION
-            Only if you are manually calculating a route (and the fare is not provided in CURRENT ROUTE RESULTS), strictly use this formula:
-            - Traditional Jeepneys: ₱14 base for the first 4 km, plus ₱2.50 per succeeding km.
-            - Modern Jeepneys/Buses: ₱17 base for the first 4 km, plus ₱2.50 per succeeding km.
-            - Discounts: Apply a strict 20% discount to the final total for Senior citizens, PWDs, and students (if mentioned).
-
-            --- DYNAMIC APP CONTEXT ---
-
-            [AVAILABLE ROUTES]
-            ${JSON.stringify(JEEP_ROUTES)}
-
-            [LANDMARKS/TERMINALS]
-            ${JSON.stringify(LANDMARKS)}
-
-            [USER'S CURRENT APP STATE]
-            Origin: ${state.origin ? state.origin.name : "Not set"}
-            Destination: ${state.dest ? state.dest.name : "Not set"}
-            Detours: ${state.detours.filter(d => d !== null).map(d => d.name).join(', ') || "None"}
-
-            [CURRENT ROUTE RESULTS]
-            ${state.routes && state.routes.length > 0 
-              ? state.routes.map((r, i) => {
-                  const vehicleUsed = r.lineCode || r.name || (r.lines ? r.lines.join(' -> ') : 'Direct vehicle');
-                  return `Option ${i + 1}: Take ${vehicleUsed} (${r.type === 'stitched' ? 'Transfer Route' : 'Direct Route'}) - Fare: ₱${r.fare}, Time: ${r.travelTime} mins`;
-                }).join('\n') 
-              : "No active map route calculated yet. Use the AVAILABLE ROUTES JSON data to find a solution for the user manually."}
-            `
-          },
-          ...chatHistory // This dynamically appends the entire conversation history
-        ]
-      })
-    });
-
-
-    const data = await response.json();
-    
-    // 5. Remove Loading Bubble
-    messagesArea.removeChild(loadingBubble);
-
-    if (data.error) {
-      appendMessage("Sorry boss, API error: " + data.error.message, 'ai');
-      return;
-    }
-
-    // 6. Display AI Response (Updated for OpenRouter/OpenAI format)
-    const aiResponseText = data.choices[0].message.content;
-    appendMessage(aiResponseText, 'ai');
-
-    // 7. Save AI Response to History so context is maintained (Updated format)
-    chatHistory.push({
-      role: "assistant", // OpenRouter uses 'assistant' instead of 'model'
-      content: aiResponseText
-    });
-
-  } catch (error) {
-    messagesArea.removeChild(loadingBubble);
-    appendMessage("Sorry boss, network error. Check your internet connection.", 'ai');
-    console.error(error);
-  }
+  // 7. Reset Map View to Cebu City Default
+  map.setView([10.3157, 123.8854], 13);
+  setSheetState('mid');
 }
 
-sendBtn.addEventListener('click', handleSendMessage);
-chatInput.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') handleSendMessage();
-});
+// Attach the listener to the button
+document.getElementById('end-trip-btn').addEventListener('click', endTrip);
