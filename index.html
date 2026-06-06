@@ -43,7 +43,6 @@
           <span class="chat-title">Manong AI</span>
           <span class="chat-status">Online</span>
         </div>
-        <button id="manong-close-btn" title="Close">✕</button>
       </div>
       
       <div id="manong-chat-messages">
@@ -66,69 +65,124 @@
     </div>
   </div>
 
-  <!-- Bottom Sheet -->
   <div id="bottom-sheet">
 
-    <!-- Drag handle -->
     <div id="sheet-handle-area">
       <div id="sheet-handle"></div>
     </div>
 
-    <!-- Sheet header (always visible in mid state) -->
-    <div id="sheet-header">
-      <div id="header-title">Jee.ply</div>
-      <div id="header-sub">Cebu City Jeepney Route Finder</div>
-    </div>
-
-    <!-- Search panel -->
     <div id="panel">
-
+      <!-- NEW: Floating Error Bubble -->
+      <div id="error-bubble"></div>
       <div class="field-group" id="waypoints-group">
-        <div class="field-row" id="origin-row">
-          <div class="field-badge badge-a">A</div>
-          <input type="text" id="origin-input" placeholder="Pick-up location…" autocomplete="off" />
+        <div class="field-row card-beige" id="origin-row">
+          <div class="field-badge badge-start">S</div>
+          <input type="text" id="origin-input" placeholder="Start location…" autocomplete="off" />
+          <button class="pin-btn" id="gps-origin-btn" title="Use current location">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><path d="M12 2a10 10 0 1 0 10 10"/></svg>
+          </button>
           <button class="pin-btn" id="pin-origin-btn" title="Pin on map">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-              <circle cx="12" cy="10" r="3"/>
-            </svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
           </button>
           <div class="suggestions" id="origin-suggestions" style="display:none"></div>
         </div>
 
-        <div class="field-divider">
-          <div class="field-divider-dots">
-            <span></span><span></span><span></span>
-          </div>
-        </div>
-
-        <div class="field-row" id="dest-row">
-          <div class="field-badge badge-b">B</div>
-          <input type="text" id="dest-input" placeholder="Destination…" autocomplete="off" />
+        <div class="field-row card-beige" id="dest-row">
+          <div class="field-badge badge-start">E</div>
+          <input type="text" id="dest-input" placeholder="End location…" autocomplete="off" />
           <button class="pin-btn" id="pin-dest-btn" title="Pin on map">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-              <circle cx="12" cy="10" r="3"/>
-            </svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
           </button>
           <div class="suggestions" id="dest-suggestions" style="display:none"></div>
         </div>
       </div>
 
       <div class="action-buttons">
-        <button id="add-detour-btn">Add Detour</button>
-        <button id="go-btn">Route Trip</button>
+        <button id="add-detour-btn" class="btn-secondary">Add Detour</button>
+        <button id="go-btn" class="btn-primary">Route Trip</button>
       </div>
-      
     </div>
 
-    <!-- Scrollable results area -->
+    <div id="builder-panel" class="hidden">
+      <div id="builder-header"></div>
+      <div id="builder-results"></div>
+    </div>
+
+    <!-- Loading overlay shown while route geometry is being plotted -->
+    <div id="loading-overlay" class="hidden">
+      <div class="loading-content">
+        <div class="loading-spinner"></div>
+        <div class="loading-title">Preparing route...</div>
+        <div class="loading-sub">Please wait</div>
+      </div>
+    </div>
+
+    <!-- Active trip panel: itinerary cards + End Trip button -->
+    <div id="active-trip-panel" class="hidden">
+      <div id="active-trip-itinerary"></div>
+      <div class="active-trip-footer">
+        <div class="active-trip-stats">
+          <div class="active-stat">
+            <span class="active-stat-label">Trips</span>
+            <span class="active-stat-val" id="active-sum-trips">—</span>
+          </div>
+          <div class="active-stat-divider"></div>
+          <div class="active-stat">
+            <span class="active-stat-label">Time</span>
+            <span class="active-stat-val" id="active-sum-time">—</span>
+          </div>
+          <div class="active-stat-divider"></div>
+          <div class="active-stat">
+            <span class="active-stat-label">Distance</span>
+            <span class="active-stat-val" id="active-sum-dist">—</span>
+          </div>
+        </div>
+        <button id="end-trip-btn" class="btn-end-trip">End Trip</button>
+      </div>
+    </div>
+
     <div id="sheet-body">
       <div id="status-bar"></div>
       <div id="results"></div>
     </div>
 
-  </div><!-- /bottom-sheet -->
+    <div id="summary-footer" class="hidden">
+
+      <!-- Itinerary timeline — injected by showTripSummary() -->
+      <div id="summary-itinerary"></div>
+
+      <!-- Stats + actions -->
+      <div class="summary-divider"></div>
+
+      <div class="summary-stats">
+        <div class="summary-stat-row">
+          <span class="stat-label">Number of Trips</span>
+          <span id="sum-trips" class="stat-val">0 trips</span>
+        </div>
+        <div class="summary-stat-row">
+          <span class="stat-label">Travel Time</span>
+          <span id="sum-time" class="stat-val">0 mins</span>
+        </div>
+        <div class="summary-stat-row">
+          <span class="stat-label">Kilometers Travelled</span>
+          <span id="sum-dist" class="stat-val">0 km</span>
+        </div>
+      </div>
+
+      <div class="summary-divider"></div>
+
+      <div class="summary-actions">
+        <button id="builder-back-btn" class="btn-secondary">Back</button>
+        <button id="start-trip-btn" class="btn-primary">
+          <span>Start Trip</span>
+          <span class="btn-divider">|</span>
+          <span id="sum-fare">₱0.00</span>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
 </div>
 
 <!-- Data files -->
@@ -141,6 +195,9 @@
 
 <!-- App / UI -->
 <script src="app.js"></script>
+
+<!-- Manong AI -->
+ <script src="manong.js"></script>
 
 </body>
 </html>

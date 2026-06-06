@@ -59,6 +59,7 @@ const COORDS = {
 
   // ── Modern Mega-Developments ──────────────────────────────────────────────
   "SM Seaside City Cebu (Mountain Wing)":            { lat: 10.28187, lng: 123.87976 }, 
+  "SM Seaside City Cebu":                            { lat: 10.28187, lng: 123.87976 }, // alias used by CIBUS & MYB-3
   "Cebu Ocean Park":                 { lat: 10.2804, lng: 123.8821 }, 
   "NUSTAR Resort & Casino":          { lat: 10.2740, lng: 123.8856 }, 
   "Il Corso Lifemalls":              { lat: 10.2682, lng: 123.8741 }, 

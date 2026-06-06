@@ -29,6 +29,35 @@ function findRoutes(originLat, originLng, destLat, destLng) {
   const WALK_THRESH = 0.7;
   const XFER_THRESH = 0.45;
 
+  // If origin and destination are within easy walking distance, skip jeepney search
+  const straightLineDist = haversine(originLat, originLng, destLat, destLng);
+  const WALK_ONLY_DIST = 0.50; // 500 m — just walk it, no jeepney needed
+  if (straightLineDist <= WALK_ONLY_DIST) {
+    const walkTime = Math.round(straightLineDist * 12);
+    return [{
+      type: "walk",
+      legs: [{
+        code: "WALK",
+        name: "Walk to destination",
+        color: "#888888",
+        boardAt: "Origin",
+        alightAt: "Destination",
+        stops: [
+          { name: "Origin",      lat: originLat, lng: originLng },
+          { name: "Destination", lat: destLat,   lng: destLng   }
+        ],
+        dist: straightLineDist
+      }],
+      walkToFirst: 0,
+      walkFromLast: 0,
+      totalDist: straightLineDist,
+      travelTime: walkTime,
+      fare: 0,
+      transfers: 0,
+      isWalkOnly: true
+    }];
+  }
+
   for (const [code, route] of Object.entries(JEEP_ROUTES)) {
     const o = nearestStop(route, originLat, originLng);
     const d = nearestStop(route, destLat, destLng);
@@ -65,12 +94,30 @@ function findRoutes(originLat, originLng, destLat, destLng) {
       const d2 = nearestStop(route2, destLat, destLng);
       if (d2.dist > WALK_THRESH) continue;
 
-      let bestXfer = null, bestXferDist = Infinity;
+      // Score each candidate transfer by total journey cost:
+      // (dist ridden on R1 to xfer point) + (xfer walk) + (straight-line from xfer to dest)
+      // This prevents the router from choosing a far-away "convenient" stop (e.g. SM City)
+      // when a closer intermediate stop (e.g. CITU, South Bus Terminal) is on the way.
+      const boardStop1 = route1.stops[o1.idx];
+      const boardToDest = haversine(boardStop1.lat, boardStop1.lng, destLat, destLng);
+      let bestXfer = null, bestXferScore = Infinity;
       route1.stops.forEach((s1, i1) => {
+        // Skip stops that are much further from the destination than where we board —
+        // riding away from the destination just to transfer makes no geographic sense.
+        const s1ToDest = haversine(s1.lat, s1.lng, destLat, destLng);
+        if (s1ToDest > boardToDest * 1.4) return;
+
         route2.stops.forEach((s2, i2) => {
-          const d = haversine(s1.lat, s1.lng, s2.lat, s2.lng);
-          if (d < XFER_THRESH && d < bestXferDist) {
-            bestXferDist = d; bestXfer = { i1, i2, s1, s2 };
+          const xferWalk = haversine(s1.lat, s1.lng, s2.lat, s2.lng);
+          if (xferWalk >= XFER_THRESH) return;
+
+          const rideOnR1   = haversine(boardStop1.lat, boardStop1.lng, s1.lat, s1.lng);
+          const remainDist = haversine(s2.lat, s2.lng, destLat, destLng);
+          const score      = rideOnR1 + xferWalk + remainDist;
+
+          if (score < bestXferScore) {
+            bestXferScore = score;
+            bestXfer = { i1, i2, s1, s2, xferWalk };
           }
         });
       });
@@ -93,7 +140,7 @@ function findRoutes(originLat, originLng, destLat, destLng) {
       for (let i = 0; i < stops2.length-1; i++)
         dist2 += haversine(stops2[i].lat, stops2[i].lng, stops2[i+1].lat, stops2[i+1].lng);
 
-      const MIN_RIDE_DIST = 0.5; // Lowered to 500m threshold
+      const MIN_RIDE_DIST = 0.8; // Must ride at least 800m to justify a jeepney
 
       if (dist1 < MIN_RIDE_DIST || dist2 < MIN_RIDE_DIST) {
         // Find which leg is longer and keep it as the primary direct route.
@@ -136,7 +183,7 @@ function findRoutes(originLat, originLng, destLat, destLng) {
         continue; // Skip the illogical 2-jeepney route
       }
 
-      const travelTime = Math.round(o1.dist*12 + (dist1/20)*60 + bestXferDist*12 + (dist2/20)*60 + d2.dist*12);
+      const travelTime = Math.round(o1.dist*12 + (dist1/20)*60 + bestXfer.xferWalk*12 + (dist2/20)*60 + d2.dist*12);
       results.push({
         type: "transfer",
         legs: [
@@ -145,24 +192,19 @@ function findRoutes(originLat, originLng, destLat, destLng) {
           { code: code2, name: route2.name, color: route2.color,
             boardAt: stops2[0].name, alightAt: stops2[stops2.length-1].name, stops: stops2, dist: dist2 }
         ],
-        xferWalk: bestXferDist, walkToFirst: o1.dist, walkFromLast: d2.dist,
-        totalDist: o1.dist + dist1 + bestXferDist + dist2 + d2.dist,
+        xferWalk: bestXfer.xferWalk, walkToFirst: o1.dist, walkFromLast: d2.dist,
+        totalDist: o1.dist + dist1 + bestXfer.xferWalk + dist2 + d2.dist,
         travelTime, fare: calcFare(dist1) + calcFare(dist2), transfers: 1
       });
     }
   }
-
-  // ... [Existing loops finishing up] ...
-
-  // ─── START FIX: STRICT ROUTE PRIORITIZATION & DEDUPLICATION ───
+  
+// ─── START FIX: STRICT ROUTE PRIORITIZATION & DEDUPLICATION ───
   
   // 1. Deduplicate identical vehicle combinations
   const uniqueCombos = new Map();
   results.forEach(r => {
-    // Identify the route strictly by the jeepney codes used (e.g., "42D" or "13C|04L")
     const key = r.legs.map(l => l.code).join("|");
-    
-    // If we haven't seen this combo, or if THIS version is faster (less walking), keep it.
     if (!uniqueCombos.has(key) || r.travelTime < uniqueCombos.get(key).travelTime) {
       uniqueCombos.set(key, r);
     }
@@ -172,24 +214,46 @@ function findRoutes(originLat, originLng, destLat, destLng) {
 
   // 2. Sort by Hierarchy: Least Rides -> Cheapest Fare -> Shortest Time
   bestRoutes.sort((a, b) => {
-    if (a.transfers !== b.transfers) return a.transfers - b.transfers; // Prioritize fewest rides
-    if (a.fare !== b.fare) return a.fare - b.fare;                     // Then prioritize lowest fare
-    return a.travelTime - b.travelTime;                                // Then prioritize fastest time
+    if (a.transfers !== b.transfers) return a.transfers - b.transfers; 
+    if (a.fare !== b.fare) return a.fare - b.fare;                     
+    return a.travelTime - b.travelTime;                                
   });
 
-  // 3. Prune Unnecessary Transfers
-  // If we found a direct route, aggressively filter out any transfer routes
-  const directRoutes = bestRoutes.filter(r => r.transfers === 0);
-  if (directRoutes.length > 0) {
-    const bestDirectTime = Math.min(...directRoutes.map(r => r.travelTime));
-    
-    // Only keep a transfer route if it saves you a massive amount of time (e.g., 15+ mins)
-    bestRoutes = bestRoutes.filter(r => 
-      r.transfers === 0 || r.travelTime <= bestDirectTime - 15
-    );
+  // 3. Keep Top 3 Options
+  bestRoutes = bestRoutes.slice(0, 3);
+
+  // 4. WALK-ONLY FALLBACK: if no jeepney routes found, return a pure walking route.
+  //    Flag as 'noTransit' if the distance is too far to comfortably walk (>500m).
+  if (bestRoutes.length === 0) {
+    const walkDist = haversine(originLat, originLng, destLat, destLng);
+    const walkTime = Math.round(walkDist * 12);
+    const isTooFarToWalk = walkDist > 0.5;
+    bestRoutes = [{
+      type: "walk",
+      legs: [{
+        code: "WALK",
+        name: isTooFarToWalk ? "No transit available — walk or find a nearby stop" : "Walk to destination",
+        color: "#888888",
+        boardAt: "Origin",
+        alightAt: "Destination",
+        stops: [
+          { name: "Origin",      lat: originLat, lng: originLng },
+          { name: "Destination", lat: destLat,   lng: destLng   }
+        ],
+        dist: walkDist
+      }],
+      walkToFirst: 0,
+      walkFromLast: 0,
+      totalDist: walkDist,
+      travelTime: walkTime,
+      fare: 0,
+      transfers: 0,
+      isWalkOnly: true,
+      noTransit: isTooFarToWalk
+    }];
   }
 
-  return bestRoutes.slice(0, 3);
+  return bestRoutes;
 }
 
 // ─── GEOCODING ────────────────────────────────────────────────────────────

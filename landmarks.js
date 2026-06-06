@@ -11,16 +11,14 @@ const LANDMARKS = [
   { name: "SM City Cebu",                      ...COORDS["SM City Cebu"] },
   { name: "Ayala Center Cebu",                 ...COORDS["Ayala Center Cebu"] },
   { name: "Parkmall",                          ...COORDS["Parkmall"] },
-  { name: "IT Park",                           ...COORDS["IT Park Terminal"] },
+  { name: "IT Park",                           ...COORDS["IT Park"] },
   { name: "South Bus Terminal (CSBT)",         ...COORDS["South Bus Terminal"] },
   { name: "North Bus Terminal (NBT)",          ...COORDS["North Bus Terminal"] },
   { name: "Pier 1",                            ...COORDS["Pier"] },
   { name: "Alumnos Terminal",                  ...COORDS["Alumnos"] },
-  { name: "Parkmall Terminal",                 ...COORDS["Parkmall Terminal"]},
-  { name: "Mango Jeep Terminal (Poblacion)",   ...COORDS["Mango Jeep Terminal (Poblacion)"]},
 
   // ── Modern Mega-Developments ──────────────────────────────────────────────
-  { name: "SM Seaside City Cebu (Mountain Wing)", ...COORDS["SM Seaside City Cebu (Mountain Wing)"] },
+  { name: "SM Seaside City Cebu",              ...COORDS["SM Seaside City Cebu (Mountain Wing)"] },
   { name: "Cebu Ocean Park",                   ...COORDS["Cebu Ocean Park"] },
   { name: "Il Corso Lifemalls",                ...COORDS["Il Corso Lifemalls"] },
 
@@ -33,7 +31,7 @@ const LANDMARKS = [
   { name: "Mambaling",                         ...COORDS["Mambaling"] },
   { name: "Guadalupe",                         ...COORDS["Guadalupe"] },
   { name: "Banawa",                            ...COORDS["Banawa"] },
-  { name: "Urgello",                           ...COORDS["Urgello Transit"] }, // test
+  { name: "Urgello",                           ...COORDS["Urgello"] },
   { name: "Mabolo",                            ...COORDS["Mabolo"] },
   { name: "Lahug",                             ...COORDS["Lahug (Jy Square)"] },
   { name: "Apas",                              ...COORDS["Apas"] },
@@ -56,20 +54,13 @@ const LANDMARKS = [
   { name: "Taboan Public Market",              ...COORDS["Taboan Market"] },
   { name: "Gaisano Grand Jai-Alai",            ...COORDS["Gaisano Grand Jai-Alai"] },
   { name: "Escario Central Mall",              ...COORDS["Escario Central Mall"] },
-  { name: "Elizabeth Mall (E-Mall) Leon Kilat Entrance",           ...COORDS["E-Mall (Leon Kilat Entrance)"] },
-  { name: "Metro Colon",                       ...COORDS["Metro Colon"]},
-  { name: "SM Hypermarket",                    ...COORDS["SM Hypermarket"]},
-  { name: "GMall",                             ...COORDS["GMall of Cebu"]},
-
+  { name: "Elizabeth Mall (E-Mall)",           ...COORDS["Elizabeth Mall (E-Mall)"] },
 
   // ── Government / Historic Sites ───────────────────────────────────────────
   { name: "Cebu City Hall",                    ...COORDS["City Hall"] },
   { name: "Cebu Provincial Capitol",           ...COORDS["Capitol"] },
   { name: "Cebu Metropolitan Cathedral",       ...COORDS["Cathedral"] },
-  { name: "Museo Sugbo",                       ...COORDS["Museo Sugbo"]},
-  { name: "Maritima Ruins",                    ...COORDS["Maritima Ruins"]},
-  { name: "Plaza Independencia",               ...COORDS["Plaza Independencia"]},
-  { name: "Tisa Barangay Hall",                ...COORDS["Tisa Barangay Hall"]},
+  { name: "Plaza Independencia",               ...COORDS["Plaza Independencia"] },
 
   // ── Schools ───────────────────────────────────────────────────────────────
   { name: "University of San Carlos (USC) Main", ...COORDS["USC Main"] },
@@ -79,17 +70,11 @@ const LANDMARKS = [
   { name: "SWU (Basak Campus)",                ...COORDS["SWU Basak Campus"] },
   { name: "CITU (Cebu Inst. of Tech.)",        ...COORDS["CITU"] },
   { name: "University of Cebu (UC)",           ...COORDS["University of Cebu (UC)"] },
-  { name: "UC-Main (Leon Kilat Entrance)",     ...COORDS["UC-Main (Leon Kilat Entrance)"]},
-  { name: "Cebu Doctors University (CDU)",     ...COORDS["Cebu Doctors University (CDU)"]},
 
   // ── Hospitals ─────────────────────────────────────────────────────────────
   { name: "Cebu Doctors University Hospital",  ...COORDS["Cebu Doctors University Hospital"] },
   { name: "Vicente Sotto Memorial Hospital",   ...COORDS["Vicente Sotto Hosp."] },
   { name: "Cebu City Medical Center",          ...COORDS["Cebu City Medical Center"] },
   { name: "Miller Hospital",                   ...COORDS["Miller Hospital"] },
-  { name: "Sacred Heart Hospital",             ...COORDS["Sacred Heart Hospital"]},
-  { name: "Chong Hua Hospital Mandaue",        ...COORDS["Chong Hua Hospital Mandaue"]},
 
-  // Churches and Funeral homes
-  { name: "Queen City Memorial Garden",        ...COORDS["Queen City Memorial Garden"]},
 ];
